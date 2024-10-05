@@ -27,9 +27,6 @@ export class GameScene extends Scene {
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.85);
 
-        const gameWidth = 1024;
-        const gameHeight = 768;
-
         const symbolHeight = 134;
         const symbolWidth = 134;
         const reelWidth = symbolWidth;
@@ -37,14 +34,14 @@ export class GameScene extends Scene {
         const reelCount = 3;
         const rowsCount = 3;
 
-        function getMachineXPosition() {
+        function getMachineXPosition(centerX: number): number {
             const halfWidth = (reelWidth * reelCount) / 2;
-            return gameWidth / 2 - halfWidth;
+            return centerX - halfWidth;
         }
 
-        function getMachineHeight() {
+        function getMachineHeight(centerY: number): number {
             const halfHeight = (symbolHeight * rowsCount) / 2;
-            return gameHeight / 2 - halfHeight;
+            return centerY - halfHeight;
         }
 
         const reels = Array.from({ length: reelCount }, (_, reelIndex) => {
@@ -64,6 +61,10 @@ export class GameScene extends Scene {
             return reel;
         });
 
-        this.add.container(getMachineXPosition(), getMachineHeight(), reels);
+        this.add.container(
+            getMachineXPosition(this.cameras.main.centerX),
+            getMachineHeight(this.cameras.main.centerY),
+            reels
+        );
     }
 }
