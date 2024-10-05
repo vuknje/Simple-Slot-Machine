@@ -1,15 +1,27 @@
+import SlotCombinator from './SlotCombinator';
+
 class GameUI extends Phaser.GameObjects.Container {
+    reels: Phaser.GameObjects.Container[];
+
     constructor(scene: Phaser.Scene, centerX: number, centerY: number) {
         super(scene);
 
         const reelCount = 3;
         const rowsCount = 3;
+        const uniqueSymbolsCount = 5;
+        const reelRepeatCount = 2;
+
         const symbolHeight = 134;
         const symbolWidth = 134;
+        const spaceBetweenReels = 20;
         const reelWidth = symbolWidth;
         const screenHeight = symbolHeight * rowsCount;
-        const uniqueSymbolsCount = 5;
-        const spaceBetweenReels = 20;
+
+        const combinator = new SlotCombinator(
+            uniqueSymbolsCount,
+            reelRepeatCount,
+            reelCount
+        );
 
         function getMachineXPosition(centerX: number): number {
             const halfWidth =
@@ -31,14 +43,14 @@ class GameUI extends Phaser.GameObjects.Container {
             );
         }
 
-        const reels = Array.from({ length: reelCount }, (_, reelIndex) => {
+        this.reels = Array.from({ length: reelCount }, (_, reelIndex) => {
             const symbols = Array.from(
-                { length: uniqueSymbolsCount },
-                (_, index) => {
+                { length: combinator.symbols[reelIndex].length },
+                (_, symbolIndex) => {
                     const img = this.scene.add.image(
                         0,
-                        index * symbolHeight,
-                        `symbol${index}`
+                        symbolIndex * symbolHeight,
+                        `symbol${combinator.symbols[reelIndex][symbolIndex]}`
                     );
                     img.setOrigin(0, 0);
                     return img;
@@ -59,7 +71,7 @@ class GameUI extends Phaser.GameObjects.Container {
                     0xff0000
                 )
                 .setOrigin(0, 0)
-                .setVisible(true);
+                .setVisible(false);
             const mask = maskRect.createGeometryMask();
             reel.setMask(mask);
             return reel;
@@ -68,7 +80,7 @@ class GameUI extends Phaser.GameObjects.Container {
         this.scene.add.container(
             getMachineXPosition(centerX),
             getMachineHeight(centerY),
-            reels
+            this.reels
         );
     }
 }
