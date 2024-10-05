@@ -30,14 +30,18 @@ export class GameScene extends Scene {
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.85);
 
-        new GameUI(this, this.cameras.main.centerX, this.cameras.main.centerY);
+        const gameUI = new GameUI(
+            this,
+            this.cameras.main.centerX,
+            this.cameras.main.centerY
+        );
 
         new Button(
             this,
             this.cameras.main.centerX,
             this.cameras.main.centerY + 290,
             'SPIN!',
-            () => console.log('SPIN!')
+            () => gameUI.spin()
         );
     }
 }

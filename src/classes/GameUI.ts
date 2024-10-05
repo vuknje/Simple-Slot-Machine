@@ -83,6 +83,32 @@ class GameUI extends Phaser.GameObjects.Container {
             this.reels
         );
     }
+
+    spin() {
+        let currentScore = 0;
+        let newScore = -134 * 6;
+
+        for (const [reelIndex, reel] of this.reels.entries()) {
+            this.scene.tweens.addCounter({
+                from: currentScore,
+                to: newScore,
+                duration: 1000 + reelIndex * 250,
+                ease: 'Back.easeOut',
+                onUpdate: (tween) => {
+                    reel.setY(Math.round(tween.getValue()));
+                },
+                onComplete: () => {
+                    if (reelIndex === this.reels.length - 1) {
+                        this.onSpinEnd();
+                    }
+                }
+            });
+        }
+    }
+
+    onSpinEnd() {
+        console.log('Spin end.');
+    }
 }
 
 export default GameUI;
