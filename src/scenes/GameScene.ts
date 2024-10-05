@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import Button from '../classes/Button';
 
 export class GameScene extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
@@ -94,6 +95,14 @@ export class GameScene extends Scene {
             getMachineXPosition(this.cameras.main.centerX),
             getMachineHeight(this.cameras.main.centerY),
             reels
+        );
+
+        new Button(
+            this,
+            this.cameras.main.centerX,
+            this.cameras.main.centerY + 290,
+            'SPIN!',
+            () => console.log('SPIN!')
         );
     }
 }
