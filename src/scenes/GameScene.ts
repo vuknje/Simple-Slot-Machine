@@ -50,13 +50,8 @@ export class GameScene extends Scene {
         }
 
         function getMaskXPosition(centerX: number, reelIndex: number): number {
-            const halfWidth =
-                ((reelWidth + spaceBetweenReels) * reelCount -
-                    spaceBetweenReels) /
-                2;
             return (
-                centerX -
-                halfWidth +
+                getMachineXPosition(centerX) +
                 reelIndex * (reelWidth + spaceBetweenReels)
             );
         }
