@@ -12,6 +12,12 @@ export class GameScene extends Scene {
     preload() {
         this.load.setPath('assets');
         this.load.image('background', 'bg.png');
+
+        this.load.image('symbol0', 'symbol0.png');
+        this.load.image('symbol1', 'symbol1.png');
+        this.load.image('symbol2', 'symbol2.png');
+        this.load.image('symbol3', 'symbol3.png');
+        this.load.image('symbol4', 'symbol4.png');
     }
 
     create() {
@@ -20,15 +26,44 @@ export class GameScene extends Scene {
 
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.85);
-        1;
-        this.text = this.add.text(512, 384, 'Hello world!', {
-            fontFamily: 'Arial Black',
-            fontSize: 38,
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 8,
-            align: 'center'
+
+        const gameWidth = 1024;
+        const gameHeight = 768;
+
+        const symbolHeight = 134;
+        const symbolWidth = 134;
+        const reelWidth = symbolWidth;
+        const uniqueSymbolsCount = 5;
+        const reelCount = 3;
+        const rowsCount = 3;
+
+        function getMachineXPosition() {
+            const halfWidth = (reelWidth * reelCount) / 2;
+            return gameWidth / 2 - halfWidth;
+        }
+
+        function getMachineHeight() {
+            const halfHeight = (symbolHeight * rowsCount) / 2;
+            return gameHeight / 2 - halfHeight;
+        }
+
+        const reels = Array.from({ length: reelCount }, (_, reelIndex) => {
+            const symbols = Array.from(
+                { length: uniqueSymbolsCount },
+                (_, index) => {
+                    const img = this.add.image(
+                        0,
+                        index * symbolHeight,
+                        `symbol${index}`
+                    );
+                    img.setOrigin(0, 0);
+                    return img;
+                }
+            );
+            const reel = this.add.container(reelWidth * reelIndex, 0, symbols);
+            return reel;
         });
-        this.text.setOrigin(0.5);
+
+        this.add.container(getMachineXPosition(), getMachineHeight(), reels);
     }
 }
