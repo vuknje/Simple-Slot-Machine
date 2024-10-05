@@ -27,12 +27,13 @@ export class GameScene extends Scene {
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.85);
 
+        const reelCount = 3;
+        const rowsCount = 3;
         const symbolHeight = 134;
         const symbolWidth = 134;
         const reelWidth = symbolWidth;
+        const screenHeight = symbolHeight * rowsCount;
         const uniqueSymbolsCount = 5;
-        const reelCount = 3;
-        const rowsCount = 3;
 
         function getMachineXPosition(centerX: number): number {
             const halfWidth = (reelWidth * reelCount) / 2;
@@ -42,6 +43,11 @@ export class GameScene extends Scene {
         function getMachineHeight(centerY: number): number {
             const halfHeight = (symbolHeight * rowsCount) / 2;
             return centerY - halfHeight;
+        }
+
+        function getMaskXPosition(centerX: number, reelIndex: number): number {
+            const halfWidth = (reelWidth * reelCount) / 2;
+            return centerX - halfWidth + reelIndex * reelWidth;
         }
 
         const reels = Array.from({ length: reelCount }, (_, reelIndex) => {
@@ -58,6 +64,19 @@ export class GameScene extends Scene {
                 }
             );
             const reel = this.add.container(reelWidth * reelIndex, 0, symbols);
+
+            const maskRect = this.add
+                .rectangle(
+                    getMaskXPosition(this.cameras.main.centerX, reelIndex),
+                    getMachineHeight(this.cameras.main.centerY),
+                    reelWidth,
+                    screenHeight,
+                    0xff0000
+                )
+                .setOrigin(0, 0)
+                .setVisible(true);
+            const mask = maskRect.createGeometryMask();
+            reel.setMask(mask);
             return reel;
         });
 
