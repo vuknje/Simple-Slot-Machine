@@ -1,83 +1,49 @@
-import SlotCombinator from './SlotCombinator';
+import { ViewData } from './ViewModel';
 
 class GameUI extends Phaser.GameObjects.Container {
+    vm: ViewData;
     reels: Phaser.GameObjects.Container[];
 
-    symbolHeight: number;
-    reelCircumference: number;
-
-    instancePositions: number[];
-    delayBetweenReelSpins: number;
     isSpinning: boolean = false;
 
-    constructor(scene: Phaser.Scene, centerX: number, centerY: number) {
+    DEV_MODE: boolean = false;
+
+    constructor(scene: Phaser.Scene, viewData: ViewData) {
         super(scene);
 
-        const DEV_MODE = true;
+        this.DEV_MODE = false;
+        this.vm = viewData;
 
-        const reelCount = 3;
-        const rowsCount = 3;
-        const uniqueSymbolsCount = 3; // 5
-        const reelRepeatCount = 1; // 2;
+        this.reels = this.generateReels(viewData);
 
-        const symbolHeight = 134;
-        const symbolWidth = 134;
-        const spaceBetweenReels = 20;
-        const delayBetweenReelSpins = 250;
-        const reelWidth = symbolWidth;
-        const screenHeight = symbolHeight * rowsCount;
+        this.scene.add.container(
+            this.vm.machineX,
+            this.vm.machineY,
+            this.reels
+        );
+    }
 
-        const combinator = new SlotCombinator(reelCount);
-        combinator.generateSymbols(uniqueSymbolsCount, reelRepeatCount);
-
-        this.symbolHeight = symbolHeight;
-        this.instancePositions = Array(reelCount).fill(0);
-        this.delayBetweenReelSpins = delayBetweenReelSpins;
-        this.reelCircumference =
-            combinator.getSymbolCountPerReel() * this.symbolHeight;
-
-        function getMachineXPosition(centerX: number): number {
-            const halfWidth =
-                ((reelWidth + spaceBetweenReels) * reelCount -
-                    spaceBetweenReels) /
-                2;
-            return centerX - halfWidth;
-        }
-
-        function getMachineHeight(centerY: number): number {
-            const halfHeight = (symbolHeight * rowsCount) / 2;
-            return centerY - halfHeight;
-        }
-
-        function getMaskXPosition(centerX: number, reelIndex: number): number {
-            return (
-                getMachineXPosition(centerX) +
-                reelIndex * (reelWidth + spaceBetweenReels)
-            );
-        }
-
-        this.reels = Array.from({ length: reelCount }, (_, reelIndex) => {
-            const reelInstances = Array.from(
-                { length: 2 },
-                (_, instanceIndex) => {
-                    const symbols = Array.from(
-                        { length: combinator.symbols[reelIndex].length },
-                        (_, symbolIndex) => {
+    generateReels(viewData: ViewData) {
+        return viewData.reels.map((reelData, reelIndex) => {
+            const reelInstances = reelData.instances.map(
+                (instanceData, instanceIndex) => {
+                    const symbols = instanceData.symbolIds.map(
+                        (symbolId, symbolIndex) => {
                             const img = this.scene.add.image(
                                 0,
-                                symbolIndex * symbolHeight,
-                                `symbol${combinator.symbols[reelIndex][symbolIndex]}`
+                                symbolIndex * viewData.symbolHeight,
+                                `symbol${symbolId}`
                             );
                             img.setOrigin(0, 0);
                             return img;
                         }
                     );
 
-                    const children = DEV_MODE
+                    const children = this.DEV_MODE
                         ? [
                               this.DEV_MODE_getColor(
-                                  symbolWidth,
-                                  this.reelCircumference,
+                                  viewData.reelWidth,
+                                  viewData.reelCircumference,
                                   instanceIndex
                               ),
                               ...symbols
@@ -86,7 +52,7 @@ class GameUI extends Phaser.GameObjects.Container {
 
                     const reelInstance = this.scene.add.container(
                         0,
-                        instanceIndex * this.reelCircumference,
+                        instanceIndex * viewData.reelCircumference,
                         children
                     );
                     return reelInstance;
@@ -94,40 +60,27 @@ class GameUI extends Phaser.GameObjects.Container {
             );
 
             const reel = this.scene.add.container(
-                reelWidth * reelIndex + spaceBetweenReels * reelIndex,
+                viewData.reelWidth * reelIndex +
+                    viewData.spaceBetweenReels * reelIndex,
                 0,
                 reelInstances
             );
 
-            const mask = this.createReelMask(
-                getMaskXPosition(centerX, reelIndex),
-                getMachineHeight(centerY),
-                reelWidth,
-                screenHeight
-            );
+            const mask = this.scene.add
+                .rectangle(
+                    reelData.x,
+                    reelData.y,
+                    this.vm.reelWidth,
+                    this.vm.reelHeight,
+                    0xff0000
+                )
+                .setOrigin(0, 0)
+                .setVisible(this.DEV_MODE)
+                .createGeometryMask();
 
             reel.setMask(mask);
             return reel;
         });
-
-        this.scene.add.container(
-            getMachineXPosition(centerX),
-            getMachineHeight(centerY),
-            this.reels
-        );
-    }
-
-    createReelMask(
-        x: number,
-        y: number,
-        width: number,
-        height: number
-    ): Phaser.Display.Masks.GeometryMask {
-        const maskRect = this.scene.add
-            .rectangle(x, y, width, height, 0xff0000)
-            .setOrigin(0, 0)
-            .setVisible(true);
-        return maskRect.createGeometryMask();
     }
 
     spin() {
@@ -135,38 +88,44 @@ class GameUI extends Phaser.GameObjects.Container {
 
         this.isSpinning = true;
 
-        for (const [reelIndex, reel] of this.reels.entries()) {
+        this.vm.reels.forEach((reelData, reelIndex) => {
             const instances = [
-                reel.list[0] as Phaser.GameObjects.Container,
-                reel.list[1] as Phaser.GameObjects.Container
+                this.reels[reelIndex].list[0] as Phaser.GameObjects.Container,
+                this.reels[reelIndex].list[1] as Phaser.GameObjects.Container
             ];
+
             const newTotalY =
-                this.instancePositions[reelIndex] +
-                this.symbolHeight * Phaser.Math.Between(4, 8);
+                reelData.totalY +
+                this.vm.symbolHeight * Phaser.Math.Between(4, 8);
 
             this.scene.tweens.addCounter({
-                from: this.instancePositions[reelIndex],
+                from: reelData.totalY,
                 to: newTotalY,
-                duration: 5000 + reelIndex * this.delayBetweenReelSpins,
+                duration: 5000 + reelIndex * 250,
                 ease: 'Back.easeOut',
                 onUpdate: (tween) => {
-                    const totalY = Math.round(tween.getValue());
-                    this.instancePositions[reelIndex] =
-                        totalY % this.reelCircumference;
+                    reelData.totalY = Math.round(tween.getValue());
+                    reelData.y = reelData.totalY % this.vm.reelCircumference;
 
-                    instances[0].setY(-this.instancePositions[reelIndex]);
-                    instances[1].setY(
-                        this.reelCircumference -
-                            this.instancePositions[reelIndex]
-                    );
+                    reelData.instances[0].y = -reelData.y;
+                    reelData.instances[1].y =
+                        this.vm.reelCircumference - reelData.y;
+
+                    instances[0].setY(reelData.instances[0].y);
+                    instances[1].setY(reelData.instances[1].y);
                 },
                 onComplete: () => {
                     if (reelIndex === this.reels.length - 1) {
                         this.onSpinEnd();
+
+                        if (this.DEV_MODE) {
+                            console.log(JSON.stringify(this.vm, null, 2));
+                        }
                     }
+                    reelData.totalY = reelData.y;
                 }
             });
-        }
+        });
     }
 
     onSpinEnd() {
@@ -177,7 +136,6 @@ class GameUI extends Phaser.GameObjects.Container {
     onSpinEndCb() {}
 
     // DEV_MODE
-
     DEV_MODE_getColor(
         width: number,
         height: number,

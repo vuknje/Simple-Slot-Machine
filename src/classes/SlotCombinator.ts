@@ -1,28 +1,29 @@
+import { Math } from 'phaser';
+
 class SlotCombinator {
+    uniqueSymbolsCount = 3; // 5
+    reelRepeatCount = 1; // 2;
+
     reelCount: number;
-    symbols: number[][];
+    symbolGroups: number[][];
     symbolCombination: number[];
 
     constructor(reelCount: number) {
         this.reelCount = reelCount;
     }
 
-    generateSymbols(
-        uniqueSymbolsCount: number,
-        reelRepeatCount: number,
-        shouldRandomize: boolean = true
-    ) {
-        this.symbols = Array.from({ length: this.reelCount }, () =>
+    generateSymbols(shouldRandomize: boolean = true) {
+        this.symbolGroups = Array.from({ length: this.reelCount }, () =>
             this.randomizeSymbols(
-                uniqueSymbolsCount,
-                reelRepeatCount,
+                this.uniqueSymbolsCount,
+                this.reelRepeatCount,
                 shouldRandomize
             )
         );
     }
 
     getSymbolCountPerReel() {
-        return this.symbols[0].length;
+        return this.symbolGroups[0].length;
     }
 
     randomizeSymbols(
