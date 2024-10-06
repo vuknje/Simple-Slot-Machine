@@ -3,21 +3,28 @@ class SlotCombinator {
     symbols: number[][];
     symbolCombination: number[];
 
-    constructor(
+    constructor(reelCount: number) {
+        this.reelCount = reelCount;
+    }
+
+    generateSymbols(
         uniqueSymbolsCount: number,
         reelRepeatCount: number,
-        reelCount: number
+        shouldRandomize: boolean = true
     ) {
-        this.reelCount = reelCount;
-
-        this.symbols = Array.from({ length: reelCount }, () =>
-            this.randomizeSymbols(uniqueSymbolsCount, reelRepeatCount)
+        this.symbols = Array.from({ length: this.reelCount }, () =>
+            this.randomizeSymbols(
+                uniqueSymbolsCount,
+                reelRepeatCount,
+                shouldRandomize
+            )
         );
     }
 
     randomizeSymbols(
         uniqueSymbolsCount: number,
-        repeatCount: number
+        repeatCount: number,
+        shouldRandomize: boolean
     ): number[] {
         const arr = [];
         const uniqueIndexes = Array.from(
@@ -28,7 +35,13 @@ class SlotCombinator {
         while (repeatCount-- > 0) {
             arr.push(...uniqueIndexes);
         }
-        return Phaser.Utils.Array.Shuffle(arr);
+
+        if (shouldRandomize) {
+            console.log('randomize');
+            return Phaser.Utils.Array.Shuffle(arr);
+        } else {
+            return arr;
+        }
     }
 }
 

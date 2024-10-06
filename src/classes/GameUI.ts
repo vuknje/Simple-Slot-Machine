@@ -17,11 +17,8 @@ class GameUI extends Phaser.GameObjects.Container {
         const reelWidth = symbolWidth;
         const screenHeight = symbolHeight * rowsCount;
 
-        const combinator = new SlotCombinator(
-            uniqueSymbolsCount,
-            reelRepeatCount,
-            reelCount
-        );
+        const combinator = new SlotCombinator(reelCount);
+        combinator.generateSymbols(uniqueSymbolsCount, reelRepeatCount, false);
 
         function getMachineXPosition(centerX: number): number {
             const halfWidth =
