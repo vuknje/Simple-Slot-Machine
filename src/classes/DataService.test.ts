@@ -53,7 +53,6 @@ describe('DataService', () => {
                 [1, 0, 2]
             ];
             dataService.generateSymbolCombination(input);
-            console.log(dataService.symbolCombination);
 
             expect(dataService.symbolCombination.length).toEqual(input.length);
 

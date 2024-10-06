@@ -43,7 +43,7 @@ class DataService {
         return this.shuffle(arr);
     }
 
-    generateSymbolCombination(symbolGroups: number[][]) {
+    generateSymbolCombination(symbolGroups?: number[][]) {
         this.symbolCombination = Array.from({ length: this.reelCount }, () =>
             this.randomIntFromInterval(
                 0,
