@@ -56,25 +56,21 @@ class GameUI extends Phaser.GameObjects.Container {
                     return img;
                 }
             );
-            const reel = this.scene.add.container(
+            const reelInstance = this.scene.add.container(
                 reelWidth * reelIndex + spaceBetweenReels * reelIndex,
                 0,
                 symbols
             );
 
-            const maskRect = this.scene.add
-                .rectangle(
-                    getMaskXPosition(centerX, reelIndex),
-                    getMachineHeight(centerY),
-                    reelWidth,
-                    screenHeight,
-                    0xff0000
-                )
-                .setOrigin(0, 0)
-                .setVisible(false);
-            const mask = maskRect.createGeometryMask();
-            reel.setMask(mask);
-            return reel;
+            const mask = this.createReelMask(
+                getMaskXPosition(centerX, reelIndex),
+                getMachineHeight(centerY),
+                reelWidth,
+                screenHeight
+            );
+
+            reelInstance.setMask(mask);
+            return reelInstance;
         });
 
         this.scene.add.container(
@@ -82,6 +78,19 @@ class GameUI extends Phaser.GameObjects.Container {
             getMachineHeight(centerY),
             this.reels
         );
+    }
+
+    createReelMask(
+        x: number,
+        y: number,
+        width: number,
+        height: number
+    ): Phaser.Display.Masks.GeometryMask {
+        const maskRect = this.scene.add
+            .rectangle(x, y, width, height, 0xff0000)
+            .setOrigin(0, 0)
+            .setVisible(true);
+        return maskRect.createGeometryMask();
     }
 
     spin() {
