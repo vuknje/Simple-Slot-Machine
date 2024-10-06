@@ -1,38 +1,38 @@
 import { describe, it, expect } from 'vitest';
-import SlotCombinator from '../classes/SlotCombinator';
+import DataService from './DataService';
 
-describe('SlotCombinator', () => {
+describe('DataService', () => {
     describe('generateSymbols', () => {
         it('returns an array of the length equal to the `reelCount`', () => {
             const reelCount = 3;
-            const slotCombinator = new SlotCombinator(reelCount);
+            const dataService = new DataService(reelCount);
 
-            slotCombinator.generateSymbols();
+            dataService.generateSymbols();
 
-            expect(slotCombinator.symbolGroups.length).toEqual(reelCount);
+            expect(dataService.symbolGroups.length).toEqual(reelCount);
         });
     });
 
     describe('randomizeSymbols', () => {
         it('returns an array with 3 unique symbols repeated 2 times (shuffle is OFF)', () => {
-            const slotCombinator = new SlotCombinator(3);
+            const dataService = new DataService(3);
 
-            const output = slotCombinator['randomizeSymbols'](3, 2, false);
+            const output = dataService['randomizeSymbols'](3, 2, false);
             expect(output).toEqual([0, 1, 2, 0, 1, 2]);
         });
 
         it('returns an array with `uniqueSymbolCount` unique symbols repeated `reelRepeatCount` times (shuffle is OFF)', () => {
-            const slotCombinator = new SlotCombinator(3);
+            const dataService = new DataService(3);
 
-            const output = slotCombinator['randomizeSymbols'](5, 3, false);
+            const output = dataService['randomizeSymbols'](5, 3, false);
             const arr = [0, 1, 2, 3, 4];
             expect(output).toEqual([...arr, ...arr, ...arr]);
         });
 
         it('returns a shuffled array with `uniqueSymbolCount` unique symbols repeated `reelRepeatCount` times (shuffle is ON)', () => {
-            const slotCombinator = new SlotCombinator(3);
+            const dataService = new DataService(3);
 
-            const output = slotCombinator['randomizeSymbols'](5, 2, true);
+            const output = dataService['randomizeSymbols'](5, 2, true);
             const sortedOutput = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];
             const sortNum = (a: number, b: number) => a - b;
 
@@ -45,23 +45,21 @@ describe('SlotCombinator', () => {
     describe('generateSymbolCombination', () => {
         it('returns an array of the length equal to the `reelCount`', () => {
             const reelCount = 3;
-            const slotCombinator = new SlotCombinator(reelCount);
+            const dataService = new DataService(reelCount);
 
             const input = [
                 [1, 2, 0],
                 [0, 1, 2],
                 [1, 0, 2]
             ];
-            slotCombinator.generateSymbolCombination(input);
-            console.log(slotCombinator.symbolCombination);
+            dataService.generateSymbolCombination(input);
+            console.log(dataService.symbolCombination);
 
-            expect(slotCombinator.symbolCombination.length).toEqual(
-                input.length
-            );
+            expect(dataService.symbolCombination.length).toEqual(input.length);
 
             for (let i = 0; i < input.length; i++) {
                 expect(
-                    input[i].includes(slotCombinator.symbolCombination[i])
+                    input[i].includes(dataService.symbolCombination[i])
                 ).toBe(true);
             }
         });

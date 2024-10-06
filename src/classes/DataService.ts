@@ -1,4 +1,4 @@
-class SlotCombinator {
+class DataService {
     reelCount: number;
     symbolGroups: number[][];
     symbolCombination: number[];
@@ -65,4 +65,4 @@ class SlotCombinator {
     }
 }
 
-export default SlotCombinator;
+export default DataService;

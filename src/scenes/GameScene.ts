@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { config } from '../config';
 
-import SlotCombinator from '../classes/SlotCombinator';
+import DataService from '../classes/DataService';
 import { ViewModel } from '../classes/ViewModel';
 
 import Button from '../classes/Button';
@@ -34,8 +34,8 @@ export class GameScene extends Scene {
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.85);
 
-        const combinator = new SlotCombinator(config.reelCount);
-        combinator.generateSymbols();
+        const dataService = new DataService(config.reelCount);
+        dataService.generateSymbols();
 
         const viewModel = new ViewModel({
             symbolHeight: config.symbolHeight,
@@ -47,7 +47,7 @@ export class GameScene extends Scene {
 
         const gameUI = new GameUI(
             this,
-            viewModel.generateViewModelData(combinator.symbolGroups)
+            viewModel.generateViewModelData(dataService.symbolGroups)
         );
 
         const spinButton = new Button(
