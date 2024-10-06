@@ -171,8 +171,10 @@ class GameUI extends Phaser.GameObjects.Container {
 
     onSpinEnd() {
         this.isSpinning = false;
-        console.log('Spin end.');
+        this.onSpinEndCb();
     }
+
+    onSpinEndCb() {}
 
     // DEV_MODE
 

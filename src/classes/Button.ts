@@ -8,22 +8,16 @@ class Button extends Phaser.GameObjects.Text {
     ) {
         super(scene, x, y, label, {
             fontFamily: 'Arial Black',
-            fontSize: '34px',
             color: '#ffffff',
-            align: 'center',
-            fixedWidth: 200,
-            fixedHeight: 85,
-            backgroundColor: '#0c7b00',
-            stroke: '#063f00',
-            strokeThickness: 5
+            align: 'center'
         });
 
         this.setPadding(20);
         this.setOrigin(0.5);
 
-        this.setInteractive({ useHandCursor: true });
-
         this.initListeners(onClick);
+        this.enable();
+
         scene.add.existing(this);
     }
 
@@ -38,17 +32,43 @@ class Button extends Phaser.GameObjects.Text {
 
         this.on('pointerdown', () => {
             onClick();
-
-            this.setBackgroundColor('#11b100');
-            this.setFontSize('42px');
-            this.setFixedSize(220, 90);
+            this.setStylesClicked();
         });
 
         this.on('pointerup', () => {
-            this.setBackgroundColor('#0d8500');
-            this.setFontSize('34px');
-            this.setFixedSize(200, 85);
+            this.setStylesDefault();
         });
+    }
+
+    setStylesDefault() {
+        this.setBackgroundColor('#0d8500');
+        this.setFontSize('34px');
+        this.setFixedSize(200, 85);
+        this.setStroke('#063f00', 6);
+    }
+
+    setStylesClicked() {
+        this.setBackgroundColor('#11b100');
+        this.setFontSize('42px');
+        this.setFixedSize(220, 90);
+    }
+
+    setStylesDisabled() {
+        this.setBackgroundColor('#cccccc');
+        this.setFontSize('34px');
+        this.setFixedSize(200, 85);
+        this.setStroke('#999999', 6);
+    }
+
+    enable() {
+        this.setStylesDefault();
+        this.setInteractive({ useHandCursor: true });
+    }
+
+    disable() {
+        this.setStylesDisabled();
+        this.disableInteractive();
+        this.scene.input.setDefaultCursor('default');
     }
 }
 

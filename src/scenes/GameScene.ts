@@ -36,12 +36,21 @@ export class GameScene extends Scene {
             this.cameras.main.centerY
         );
 
-        new Button(
+        const spinButton = new Button(
             this,
             this.cameras.main.centerX,
             this.cameras.main.centerY + 290,
             'SPIN!',
-            () => gameUI.spin()
+            () => {
+                gameUI.spin();
+                setTimeout(() => {
+                    spinButton.disable();
+                }, 50);
+            }
         );
+
+        gameUI.onSpinEndCb = () => {
+            spinButton.enable();
+        };
     }
 }
