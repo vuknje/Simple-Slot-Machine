@@ -3,22 +3,38 @@ import SlotCombinator from './SlotCombinator';
 class GameUI extends Phaser.GameObjects.Container {
     reels: Phaser.GameObjects.Container[];
 
+    symbolHeight: number;
+    reelCircumference: number;
+
+    instancePositions: number[];
+    delayBetweenReelSpins: number;
+    isSpinning: boolean = false;
+
     constructor(scene: Phaser.Scene, centerX: number, centerY: number) {
         super(scene);
 
+        const DEV_MODE = true;
+
         const reelCount = 3;
         const rowsCount = 3;
-        const uniqueSymbolsCount = 5;
-        const reelRepeatCount = 2;
+        const uniqueSymbolsCount = 3; // 5
+        const reelRepeatCount = 1; // 2;
 
         const symbolHeight = 134;
         const symbolWidth = 134;
         const spaceBetweenReels = 20;
+        const delayBetweenReelSpins = 250;
         const reelWidth = symbolWidth;
         const screenHeight = symbolHeight * rowsCount;
 
         const combinator = new SlotCombinator(reelCount);
-        combinator.generateSymbols(uniqueSymbolsCount, reelRepeatCount, false);
+        combinator.generateSymbols(uniqueSymbolsCount, reelRepeatCount);
+
+        this.symbolHeight = symbolHeight;
+        this.instancePositions = Array(reelCount).fill(0);
+        this.delayBetweenReelSpins = delayBetweenReelSpins;
+        this.reelCircumference =
+            combinator.getSymbolCountPerReel() * this.symbolHeight;
 
         function getMachineXPosition(centerX: number): number {
             const halfWidth =
@@ -41,22 +57,46 @@ class GameUI extends Phaser.GameObjects.Container {
         }
 
         this.reels = Array.from({ length: reelCount }, (_, reelIndex) => {
-            const symbols = Array.from(
-                { length: combinator.symbols[reelIndex].length },
-                (_, symbolIndex) => {
-                    const img = this.scene.add.image(
-                        0,
-                        symbolIndex * symbolHeight,
-                        `symbol${combinator.symbols[reelIndex][symbolIndex]}`
+            const reelInstances = Array.from(
+                { length: 2 },
+                (_, instanceIndex) => {
+                    const symbols = Array.from(
+                        { length: combinator.symbols[reelIndex].length },
+                        (_, symbolIndex) => {
+                            const img = this.scene.add.image(
+                                0,
+                                symbolIndex * symbolHeight,
+                                `symbol${combinator.symbols[reelIndex][symbolIndex]}`
+                            );
+                            img.setOrigin(0, 0);
+                            return img;
+                        }
                     );
-                    img.setOrigin(0, 0);
-                    return img;
+
+                    const children = DEV_MODE
+                        ? [
+                              this.DEV_MODE_getColor(
+                                  symbolWidth,
+                                  this.reelCircumference,
+                                  instanceIndex
+                              ),
+                              ...symbols
+                          ]
+                        : symbols;
+
+                    const reelInstance = this.scene.add.container(
+                        0,
+                        instanceIndex * this.reelCircumference,
+                        children
+                    );
+                    return reelInstance;
                 }
             );
-            const reelInstance = this.scene.add.container(
+
+            const reel = this.scene.add.container(
                 reelWidth * reelIndex + spaceBetweenReels * reelIndex,
                 0,
-                symbols
+                reelInstances
             );
 
             const mask = this.createReelMask(
@@ -66,8 +106,8 @@ class GameUI extends Phaser.GameObjects.Container {
                 screenHeight
             );
 
-            reelInstance.setMask(mask);
-            return reelInstance;
+            reel.setMask(mask);
+            return reel;
         });
 
         this.scene.add.container(
@@ -91,17 +131,34 @@ class GameUI extends Phaser.GameObjects.Container {
     }
 
     spin() {
-        let currentScore = 0;
-        let newScore = -134 * 6;
+        if (this.isSpinning) return;
+
+        this.isSpinning = true;
 
         for (const [reelIndex, reel] of this.reels.entries()) {
+            const instances = [
+                reel.list[0] as Phaser.GameObjects.Container,
+                reel.list[1] as Phaser.GameObjects.Container
+            ];
+            const newTotalY =
+                this.instancePositions[reelIndex] +
+                this.symbolHeight * Phaser.Math.Between(4, 8);
+
             this.scene.tweens.addCounter({
-                from: currentScore,
-                to: newScore,
-                duration: 1000 + reelIndex * 250,
+                from: this.instancePositions[reelIndex],
+                to: newTotalY,
+                duration: 5000 + reelIndex * this.delayBetweenReelSpins,
                 ease: 'Back.easeOut',
                 onUpdate: (tween) => {
-                    reel.setY(Math.round(tween.getValue()));
+                    const totalY = Math.round(tween.getValue());
+                    this.instancePositions[reelIndex] =
+                        totalY % this.reelCircumference;
+
+                    instances[0].setY(-this.instancePositions[reelIndex]);
+                    instances[1].setY(
+                        this.reelCircumference -
+                            this.instancePositions[reelIndex]
+                    );
                 },
                 onComplete: () => {
                     if (reelIndex === this.reels.length - 1) {
@@ -113,7 +170,27 @@ class GameUI extends Phaser.GameObjects.Container {
     }
 
     onSpinEnd() {
+        this.isSpinning = false;
         console.log('Spin end.');
+    }
+
+    // DEV_MODE
+
+    DEV_MODE_getColor(
+        width: number,
+        height: number,
+        instanceIndex: number
+    ): Phaser.GameObjects.Rectangle {
+        const colors = [0xff00ff, 0x00ff00];
+
+        return new Phaser.GameObjects.Rectangle(
+            this.scene,
+            0,
+            0,
+            width,
+            height,
+            colors[instanceIndex]
+        ).setOrigin(0, 0);
     }
 }
 

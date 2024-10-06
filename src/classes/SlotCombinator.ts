@@ -21,6 +21,10 @@ class SlotCombinator {
         );
     }
 
+    getSymbolCountPerReel() {
+        return this.symbols[0].length;
+    }
+
     randomizeSymbols(
         uniqueSymbolsCount: number,
         repeatCount: number,
