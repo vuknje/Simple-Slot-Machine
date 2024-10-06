@@ -1,9 +1,4 @@
-import { Math } from 'phaser';
-
 class SlotCombinator {
-    uniqueSymbolsCount = 3; // 5
-    reelRepeatCount = 1; // 2;
-
     reelCount: number;
     symbolGroups: number[][];
     symbolCombination: number[];
@@ -12,23 +7,23 @@ class SlotCombinator {
         this.reelCount = reelCount;
     }
 
-    generateSymbols(shouldRandomize: boolean = true) {
-        this.symbolGroups = Array.from({ length: this.reelCount }, () =>
-            this.randomizeSymbols(
-                this.uniqueSymbolsCount,
-                this.reelRepeatCount,
+    generateSymbols(
+        shouldRandomize = true,
+        uniqueSymbolsCount = 5,
+        reelRepeatCount = 2
+    ): void {
+        this.symbolGroups = Array.from({ length: this.reelCount }, () => {
+            return this.randomizeSymbols(
+                uniqueSymbolsCount,
+                reelRepeatCount,
                 shouldRandomize
-            )
-        );
+            );
+        });
     }
 
-    getSymbolCountPerReel() {
-        return this.symbolGroups[0].length;
-    }
-
-    randomizeSymbols(
+    private randomizeSymbols(
         uniqueSymbolsCount: number,
-        repeatCount: number,
+        reelRepeatCount: number,
         shouldRandomize: boolean
     ): number[] {
         const arr = [];
@@ -37,16 +32,36 @@ class SlotCombinator {
             (_, i) => i
         );
 
-        while (repeatCount-- > 0) {
+        while (reelRepeatCount-- > 0) {
             arr.push(...uniqueIndexes);
         }
 
-        if (shouldRandomize) {
-            console.log('randomize');
-            return Phaser.Utils.Array.Shuffle(arr);
-        } else {
+        if (!shouldRandomize) {
             return arr;
         }
+
+        return this.shuffle(arr);
+    }
+
+    generateSymbolCombination(symbolGroups: number[][]) {
+        this.symbolCombination = Array.from({ length: this.reelCount }, () =>
+            this.randomIntFromInterval(
+                0,
+                (symbolGroups || this.symbolGroups).length - 1
+            )
+        );
+    }
+
+    shuffle(array: number[]) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    randomIntFromInterval(min: number, max: number) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 }
 
