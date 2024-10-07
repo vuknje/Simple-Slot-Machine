@@ -1,5 +1,3 @@
-import { ViewData } from '../classes/ViewModel';
-
 class Engine {
     rotationsPerSpin: number;
     symbolHeight: number;
@@ -21,9 +19,9 @@ class Engine {
 
     calculateSpinDistances(
         symbolCombination: number[],
-        viewData: ViewData
+        reels: { circumferencePosition: number }[]
     ): number[] {
-        return viewData.reels.map((reel, reelIndex) => {
+        return reels.map((reel, reelIndex) => {
             return this.calculateSpinDistance(
                 symbolCombination[reelIndex],
                 reel.circumferencePosition

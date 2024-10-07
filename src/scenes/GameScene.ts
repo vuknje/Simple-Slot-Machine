@@ -68,7 +68,7 @@ export class GameScene extends Scene {
 
                 const distances = engine.calculateSpinDistances(
                     dataService.symbolCombination,
-                    viewData
+                    viewData.reels
                 );
 
                 console.log(dataService.getSymbolCombinationLabels());
