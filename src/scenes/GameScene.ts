@@ -52,6 +52,7 @@ export class GameScene extends Scene {
 
         const engine = new Engine(
             config.rotationsPerSpin,
+            config.spinSpeed,
             config.symbolHeight,
             viewData.reelCircumference
         );
@@ -71,9 +72,15 @@ export class GameScene extends Scene {
                     viewData.reels
                 );
 
+                const durations = engine.calculateSpinDurations(
+                    distances,
+                    config.spinSpeed,
+                    config.delayBetweenRotations
+                );
+
                 console.log(dataService.getSymbolCombinationLabels());
 
-                gameUI.spin(distances);
+                gameUI.spin(distances, durations);
                 setTimeout(() => {
                     spinButton.disable();
                 }, 50);

@@ -83,7 +83,7 @@ class GameUI extends Phaser.GameObjects.Container {
         });
     }
 
-    spin(distances: number[]) {
+    spin(distances: number[], durations: number[]) {
         if (this.isSpinning) return;
 
         this.isSpinning = true;
@@ -97,7 +97,7 @@ class GameUI extends Phaser.GameObjects.Container {
             this.scene.tweens.addCounter({
                 from: reelData.circumferencePosition,
                 to: reelData.circumferencePosition + distances[reelIndex],
-                duration: 3000 + reelIndex * 250,
+                duration: durations[reelIndex] + reelIndex * 250,
                 ease: 'Cubic.Out',
                 onUpdate: (tween) => {
                     const totalPosition = Math.round(tween.getValue());

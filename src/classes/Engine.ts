@@ -36,6 +36,30 @@ class Engine {
             this.symbolHeight * (targetSymbolIndex - 1)
         );
     }
+
+    calculateSpinDurations(
+        distances: number[],
+        speed: number,
+        delayBetweenRotations: number
+    ): number[] {
+        return distances.map((distance, index) => {
+            return this.calculateDuration(
+                distance,
+                speed,
+                index,
+                delayBetweenRotations
+            );
+        });
+    }
+
+    calculateDuration(
+        distance: number,
+        speed: number,
+        index: number,
+        delayBetweenRotations: number
+    ) {
+        return (distance * 1) / speed + delayBetweenRotations * index;
+    }
 }
 
 export default Engine;

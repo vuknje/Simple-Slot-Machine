@@ -6,7 +6,9 @@ const config = {
     symbolWidth: 134,
     spaceBetweenReels: 20,
 
-    rotationsPerSpin: 2
+    rotationsPerSpin: 6,
+    spinSpeed: 10,
+    delayBetweenRotations: 300
 };
 
 export { config };
