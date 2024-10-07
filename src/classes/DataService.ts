@@ -44,11 +44,17 @@ class DataService {
     }
 
     generateSymbolCombination(symbolGroups?: number[][]) {
+        symbolGroups ||= this.symbolGroups;
         this.symbolCombination = Array.from({ length: this.reelCount }, () =>
-            this.randomIntFromInterval(
-                0,
-                (symbolGroups || this.symbolGroups).length - 1
-            )
+            this.randomIntFromInterval(0, symbolGroups[0].length - 1)
+        );
+    }
+
+    getSymbolCombinationLabels() {
+        const labels = ['watermelon', 'pear', 'bannana', 'orange', 'lemon'];
+        return this.symbolCombination.map(
+            (symbolIndex, reelIndex) =>
+                labels[this.symbolGroups[reelIndex][symbolIndex]]
         );
     }
 
