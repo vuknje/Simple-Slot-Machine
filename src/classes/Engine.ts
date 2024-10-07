@@ -5,6 +5,7 @@ interface InitParams {
     spinSpeed: number;
     delayBetweenRotations: number;
     symbolHeight: number;
+    rowsCount: number;
     reelCircumference: number;
 }
 
@@ -13,6 +14,7 @@ class Engine {
     spinSpeed: number;
     delayBetweenRotations: number;
     symbolHeight: number;
+    rowsCount: number;
     reelCircumference: number;
 
     constructor({
@@ -20,9 +22,14 @@ class Engine {
         spinSpeed,
         delayBetweenRotations,
         symbolHeight,
+        rowsCount,
         reelCircumference
     }: InitParams) {
-        if (this.rotationsPerSpin < 1) {
+        if (rowsCount % 2 === 0) {
+            throw new Error('rowsCount must be an odd number');
+        }
+
+        if (rotationsPerSpin < 1) {
             throw new Error('rotationsPerSpin must be at least 1');
         }
 
@@ -30,6 +37,7 @@ class Engine {
         this.spinSpeed = spinSpeed;
         this.delayBetweenRotations = delayBetweenRotations;
         this.symbolHeight = symbolHeight;
+        this.rowsCount = rowsCount;
         this.reelCircumference = reelCircumference;
     }
 
@@ -49,7 +57,8 @@ class Engine {
         return (
             -startingPoint +
             this.rotationsPerSpin * this.reelCircumference +
-            this.symbolHeight * (targetSymbolIndex - 1)
+            this.symbolHeight *
+                (targetSymbolIndex - Math.floor(this.rowsCount / 2))
         );
     }
 

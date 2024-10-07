@@ -68,6 +68,7 @@ export class GameScene extends Scene {
             spinSpeed,
             delayBetweenRotations,
             symbolHeight,
+            rowsCount,
             reelCircumference: viewData.reelCircumference
         });
 
