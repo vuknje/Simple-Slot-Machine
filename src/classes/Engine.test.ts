@@ -6,6 +6,7 @@ describe('Engine', () => {
     const _params = {
         rotationsPerSpin: 2,
         spinSpeed: 10,
+        rowsCount: 3,
         delayBetweenRotations: 300,
         symbolHeight: 134,
         reelCircumference: 2010

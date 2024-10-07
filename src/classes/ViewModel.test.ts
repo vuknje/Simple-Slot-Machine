@@ -1,5 +1,6 @@
 import { describe, it, beforeEach, expect } from 'vitest';
-import { ViewModel, ViewData } from './ViewModel';
+import ViewModel from './ViewModel';
+import { ViewData } from './ViewModel';
 
 describe('ViewModel', () => {
     const _params = {

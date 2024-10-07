@@ -1,4 +1,4 @@
-import { ViewData } from './ViewModel';
+import { ViewData, Reel } from './ViewModel';
 import Engine from './Engine';
 
 class GameUI extends Phaser.GameObjects.Container {
@@ -70,21 +70,39 @@ class GameUI extends Phaser.GameObjects.Container {
                 reelInstances
             );
 
-            const mask = this.scene.add
-                .rectangle(
-                    reelData.x,
-                    reelData.y,
-                    this.vm.reelWidth,
-                    this.vm.reelHeight,
-                    0xff0000
-                )
-                .setOrigin(0, 0)
-                .setVisible(this.DEV_MODE)
-                .createGeometryMask();
+            this.addReelBg(reelData);
+            reel.setMask(this.addMask(reelData));
 
-            reel.setMask(mask);
             return reel;
         });
+    }
+
+    addReelBg(reelData: Reel) {
+        return this.scene.add
+            .rectangle(
+                reelData.x,
+                reelData.y,
+                this.vm.reelWidth,
+                this.vm.reelHeight,
+                0xffffff
+            )
+            .setOrigin(0, 0)
+            .setStrokeStyle(4, 0x333333)
+            .setAlpha(0.85);
+    }
+
+    addMask(reelData: Reel) {
+        return this.scene.add
+            .rectangle(
+                reelData.x,
+                reelData.y,
+                this.vm.reelWidth,
+                this.vm.reelHeight,
+                0xff0000
+            )
+            .setOrigin(0, 0)
+            .setVisible(this.DEV_MODE)
+            .createGeometryMask();
     }
 
     spin(symbolCombination: number[]) {

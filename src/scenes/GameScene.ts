@@ -1,8 +1,7 @@
 import { Scene } from 'phaser';
 import { config } from '../config';
 
-import { ViewModel } from '../classes/ViewModel';
-
+import ViewModel from '../classes/ViewModel';
 import DataService from '../classes/DataService';
 import Engine from '../classes/Engine';
 import Button from '../classes/Button';

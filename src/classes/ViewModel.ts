@@ -111,5 +111,5 @@ class ViewModel {
     }
 }
 
-export { ViewModel };
+export default ViewModel;
 export type { ViewData, Reel };
