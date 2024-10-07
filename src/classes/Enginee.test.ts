@@ -1,5 +1,6 @@
 import { describe, it, beforeEach, expect } from 'vitest';
 import Engine from './Engine';
+import { Reel } from './ViewModel';
 
 describe('Engine', () => {
     const _params = {
@@ -70,6 +71,33 @@ describe('Engine', () => {
             console.log(distances);
 
             expect(distances).toEqual([3618, 5092, 3752]);
+        });
+    });
+
+    describe('updateReelPositions', () => {
+        it('updates the reel `circumferencePosition` and its instance `y` positions', () => {
+            const reelsData: Reel = {
+                x: 0,
+                y: 183,
+                circumferencePosition: 0,
+                instances: [
+                    {
+                        y: 0,
+                        symbolIds: []
+                    },
+                    {
+                        y: 2010,
+                        symbolIds: []
+                    }
+                ]
+            };
+
+            const value = 265;
+            _engine.updateReelPositions(reelsData, value);
+
+            expect(reelsData.circumferencePosition).toEqual(265);
+            expect(reelsData.instances[0].y).toEqual(-265);
+            expect(reelsData.instances[1].y).toEqual(1745);
         });
     });
 });

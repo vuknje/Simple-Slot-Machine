@@ -71,7 +71,7 @@ export class GameScene extends Scene {
             reelCircumference: viewData.reelCircumference
         });
 
-        const gameUI = new GameUI(this, viewData);
+        const gameUI = new GameUI(this, engine, viewData);
 
         const spinButton = new Button(
             this,
@@ -80,17 +80,9 @@ export class GameScene extends Scene {
             'SPIN!',
             () => {
                 dataService.generateSymbolCombination();
-
-                const distances = engine.calculateSpinDistances(
-                    dataService.symbolCombination,
-                    viewData.reels
-                );
-
-                const durations = engine.calculateSpinDurations(distances);
-
                 console.log(dataService.getSymbolCombinationLabels());
 
-                gameUI.spin(distances, durations);
+                gameUI.spin(dataService.symbolCombination);
                 setTimeout(() => {
                     spinButton.disable();
                 }, 50);

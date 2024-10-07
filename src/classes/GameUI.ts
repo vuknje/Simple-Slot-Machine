@@ -1,18 +1,22 @@
 import { ViewData } from './ViewModel';
+import { Engine } from './Engine';
 
 class GameUI extends Phaser.GameObjects.Container {
     vm: ViewData;
-    reels: Phaser.GameObjects.Container[];
+    engine: Engine;
 
+    reels: Phaser.GameObjects.Container[];
     isSpinning: boolean = false;
 
     DEV_MODE: boolean = false;
 
-    constructor(scene: Phaser.Scene, viewData: ViewData) {
+    constructor(scene: Phaser.Scene, engine: Engine, viewData: ViewData) {
         super(scene);
 
         this.DEV_MODE = false;
+
         this.vm = viewData;
+        this.engine = engine;
 
         this.reels = this.generateReels(viewData);
 
@@ -83,10 +87,17 @@ class GameUI extends Phaser.GameObjects.Container {
         });
     }
 
-    spin(distances: number[], durations: number[]) {
+    spin(symbolCombination: number[]) {
         if (this.isSpinning) return;
 
         this.isSpinning = true;
+
+        const distances = this.engine.calculateSpinDistances(
+            symbolCombination,
+            this.vm.reels
+        );
+
+        const durations = this.engine.calculateSpinDurations(distances);
 
         this.vm.reels.forEach((reelData, reelIndex) => {
             const instances = [
@@ -100,18 +111,9 @@ class GameUI extends Phaser.GameObjects.Container {
                 duration: durations[reelIndex] + reelIndex * 250,
                 ease: 'Cubic.Out',
                 onUpdate: (tween) => {
-                    const totalPosition = Math.round(tween.getValue());
+                    this.engine.updateReelPositions(reelData, tween.getValue());
+                    this.onSpinUpdate(tween.getValue());
 
-                    // update vm
-                    reelData.circumferencePosition =
-                        totalPosition % this.vm.reelCircumference;
-
-                    reelData.instances[0].y = -reelData.circumferencePosition;
-                    reelData.instances[1].y =
-                        this.vm.reelCircumference -
-                        reelData.circumferencePosition;
-
-                    // update UI
                     instances[0].setY(reelData.instances[0].y);
                     instances[1].setY(reelData.instances[1].y);
                 },
@@ -128,11 +130,16 @@ class GameUI extends Phaser.GameObjects.Container {
         });
     }
 
+    onSpinUpdate(value: number) {
+        this.onSpinEndCb(value);
+    }
+
     onSpinEnd() {
         this.isSpinning = false;
         this.onSpinEndCb();
     }
 
+    onSpinUpdateCb(value: number) {}
     onSpinEndCb() {}
 
     // DEV_MODE

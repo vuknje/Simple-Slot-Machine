@@ -112,4 +112,4 @@ class ViewModel {
 }
 
 export { ViewModel };
-export type { ViewData };
+export type { ViewData, Reel };

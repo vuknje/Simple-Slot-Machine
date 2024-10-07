@@ -1,3 +1,5 @@
+import { Reel } from './ViewModel';
+
 interface InitParams {
     rotationsPerSpin: number;
     spinSpeed: number;
@@ -61,6 +63,15 @@ class Engine {
         return (
             (distance * 1) / this.spinSpeed + this.delayBetweenRotations * index
         );
+    }
+
+    updateReelPositions(reelData: Reel, value: number) {
+        const totalPosition = Math.round(value);
+
+        reelData.circumferencePosition = totalPosition % this.reelCircumference;
+        reelData.instances[0].y = -reelData.circumferencePosition;
+        reelData.instances[1].y =
+            this.reelCircumference - reelData.circumferencePosition;
     }
 }
 
