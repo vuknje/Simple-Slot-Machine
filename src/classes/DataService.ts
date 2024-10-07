@@ -10,7 +10,7 @@ class DataService {
     generateSymbols(
         shouldRandomize = true,
         uniqueSymbolsCount = 5,
-        reelRepeatCount = 2
+        reelRepeatCount = 3
     ): void {
         this.symbolGroups = Array.from({ length: this.reelCount }, () => {
             return this.randomizeSymbols(

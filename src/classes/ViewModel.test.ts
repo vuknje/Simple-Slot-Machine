@@ -33,7 +33,7 @@ describe('ViewModel', () => {
                     {
                         x: 445,
                         y: 183,
-                        totalY: 0,
+                        circumferencePosition: 0,
                         instances: [
                             {
                                 y: 0,
@@ -70,7 +70,7 @@ describe('ViewModel', () => {
                     {
                         x: 291,
                         y: 183,
-                        totalY: 0,
+                        circumferencePosition: 0,
                         instances: [
                             {
                                 y: 0,
@@ -85,7 +85,7 @@ describe('ViewModel', () => {
                     {
                         x: 445,
                         y: 183,
-                        totalY: 0,
+                        circumferencePosition: 0,
                         instances: [
                             {
                                 y: 0,
@@ -100,7 +100,7 @@ describe('ViewModel', () => {
                     {
                         x: 599,
                         y: 183,
-                        totalY: 0,
+                        circumferencePosition: 0,
                         instances: [
                             {
                                 y: 0,

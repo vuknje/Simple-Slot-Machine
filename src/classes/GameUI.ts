@@ -83,7 +83,7 @@ class GameUI extends Phaser.GameObjects.Container {
         });
     }
 
-    spin() {
+    spin(distances: number[]) {
         if (this.isSpinning) return;
 
         this.isSpinning = true;
@@ -94,23 +94,24 @@ class GameUI extends Phaser.GameObjects.Container {
                 this.reels[reelIndex].list[1] as Phaser.GameObjects.Container
             ];
 
-            const newTotalY =
-                reelData.totalY +
-                this.vm.symbolHeight * Phaser.Math.Between(4, 8);
-
             this.scene.tweens.addCounter({
-                from: reelData.totalY,
-                to: newTotalY,
-                duration: 5000 + reelIndex * 250,
-                ease: 'Back.easeOut',
+                from: reelData.circumferencePosition,
+                to: reelData.circumferencePosition + distances[reelIndex],
+                duration: 3000 + reelIndex * 250,
+                ease: 'Cubic.Out',
                 onUpdate: (tween) => {
-                    reelData.totalY = Math.round(tween.getValue());
-                    reelData.y = reelData.totalY % this.vm.reelCircumference;
+                    const totalPosition = Math.round(tween.getValue());
 
-                    reelData.instances[0].y = -reelData.y;
+                    // update vm
+                    reelData.circumferencePosition =
+                        totalPosition % this.vm.reelCircumference;
+
+                    reelData.instances[0].y = -reelData.circumferencePosition;
                     reelData.instances[1].y =
-                        this.vm.reelCircumference - reelData.y;
+                        this.vm.reelCircumference -
+                        reelData.circumferencePosition;
 
+                    // update UI
                     instances[0].setY(reelData.instances[0].y);
                     instances[1].setY(reelData.instances[1].y);
                 },
@@ -122,7 +123,6 @@ class GameUI extends Phaser.GameObjects.Container {
                             console.log(JSON.stringify(this.vm, null, 2));
                         }
                     }
-                    reelData.totalY = reelData.y;
                 }
             });
         });

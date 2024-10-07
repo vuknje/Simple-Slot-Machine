@@ -25,7 +25,7 @@ interface ViewData {
 interface Reel {
     x: number;
     y: number;
-    totalY: number;
+    circumferencePosition: number;
     instances: ReelInstance[];
 }
 
@@ -74,7 +74,7 @@ class ViewModel {
                 return {
                     x: this.getMaskXPosition(symbolGroups.length, reelIndex),
                     y: this.getMachineYPosition(),
-                    totalY: 0,
+                    circumferencePosition: 0,
                     instances: [
                         {
                             y: 0,

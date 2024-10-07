@@ -1,9 +1,10 @@
 import { Scene } from 'phaser';
 import { config } from '../config';
 
-import DataService from '../classes/DataService';
 import { ViewModel } from '../classes/ViewModel';
 
+import DataService from '../classes/DataService';
+import Engine from '../classes/Engine';
 import Button from '../classes/Button';
 import GameUI from '../classes/GameUI';
 
@@ -45,10 +46,17 @@ export class GameScene extends Scene {
             screenCenter: this.cameras.main
         });
 
-        const gameUI = new GameUI(
-            this,
-            viewModel.generateViewModelData(dataService.symbolGroups)
+        const viewData = viewModel.generateViewModelData(
+            dataService.symbolGroups
         );
+
+        const engine = new Engine(
+            config.rotationsPerSpin,
+            config.symbolHeight,
+            viewData.reelCircumference
+        );
+
+        const gameUI = new GameUI(this, viewData);
 
         const spinButton = new Button(
             this,
@@ -56,7 +64,16 @@ export class GameScene extends Scene {
             this.cameras.main.centerY + 290,
             'SPIN!',
             () => {
-                gameUI.spin();
+                dataService.generateSymbolCombination();
+
+                const distances = engine.calculateSpinDistances(
+                    dataService.symbolCombination,
+                    viewData
+                );
+
+                console.log(dataService.getSymbolCombinationLabels());
+
+                gameUI.spin(distances);
                 setTimeout(() => {
                     spinButton.disable();
                 }, 50);

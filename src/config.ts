@@ -4,6 +4,9 @@ const config = {
 
     symbolHeight: 134,
     symbolWidth: 134,
-    spaceBetweenReels: 20
+    spaceBetweenReels: 20,
+
+    rotationsPerSpin: 2
 };
+
 export { config };
