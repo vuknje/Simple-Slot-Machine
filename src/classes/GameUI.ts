@@ -34,11 +34,11 @@ class GameUI extends Phaser.GameObjects.Container {
                     const symbols = instanceData.symbolIds.map(
                         (symbolId, symbolIndex) => {
                             const img = this.scene.add.image(
-                                0,
+                                viewData.reelWidth / 2,
                                 symbolIndex * viewData.symbolHeight,
                                 `symbol${symbolId}`
                             );
-                            img.setOrigin(0, 0);
+                            img.setOrigin(0.5, 0);
                             return img;
                         }
                     );
