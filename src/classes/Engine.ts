@@ -1,18 +1,32 @@
+interface InitParams {
+    rotationsPerSpin: number;
+    spinSpeed: number;
+    delayBetweenRotations: number;
+    symbolHeight: number;
+    reelCircumference: number;
+}
+
 class Engine {
     rotationsPerSpin: number;
+    spinSpeed: number;
+    delayBetweenRotations: number;
     symbolHeight: number;
     reelCircumference: number;
 
-    constructor(
-        rotationsPerSpin: number,
-        symbolHeight: number,
-        reelCircumference: number
-    ) {
+    constructor({
+        rotationsPerSpin,
+        spinSpeed,
+        delayBetweenRotations,
+        symbolHeight,
+        reelCircumference
+    }: InitParams) {
         if (this.rotationsPerSpin < 1) {
             throw new Error('rotationsPerSpin must be at least 1');
         }
 
         this.rotationsPerSpin = rotationsPerSpin;
+        this.spinSpeed = spinSpeed;
+        this.delayBetweenRotations = delayBetweenRotations;
         this.symbolHeight = symbolHeight;
         this.reelCircumference = reelCircumference;
     }
@@ -37,28 +51,16 @@ class Engine {
         );
     }
 
-    calculateSpinDurations(
-        distances: number[],
-        speed: number,
-        delayBetweenRotations: number
-    ): number[] {
+    calculateSpinDurations(distances: number[]): number[] {
         return distances.map((distance, index) => {
-            return this.calculateDuration(
-                distance,
-                speed,
-                index,
-                delayBetweenRotations
-            );
+            return this.calculateDuration(distance, index);
         });
     }
 
-    calculateDuration(
-        distance: number,
-        speed: number,
-        index: number,
-        delayBetweenRotations: number
-    ) {
-        return (distance * 1) / speed + delayBetweenRotations * index;
+    calculateDuration(distance: number, index: number) {
+        return (
+            (distance * 1) / this.spinSpeed + this.delayBetweenRotations * index
+        );
     }
 }
 

@@ -4,17 +4,15 @@ import Engine from './Engine';
 describe('Engine', () => {
     const _params = {
         rotationsPerSpin: 2,
+        spinSpeed: 10,
+        delayBetweenRotations: 300,
         symbolHeight: 134,
         reelCircumference: 2010
     };
     let _engine: Engine;
 
     beforeEach(() => {
-        _engine = new Engine(
-            _params.rotationsPerSpin,
-            _params.symbolHeight,
-            _params.reelCircumference
-        );
+        _engine = new Engine(_params);
     });
 
     describe('calculateSpinDistance', () => {

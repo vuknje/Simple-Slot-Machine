@@ -12,7 +12,7 @@ describe('ViewModel', () => {
 
     let _viewModel: ViewModel;
 
-    beforeEach(async () => {
+    beforeEach(() => {
         _viewModel = new ViewModel(_params);
     });
 

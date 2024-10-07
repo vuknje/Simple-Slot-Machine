@@ -29,20 +29,33 @@ export class GameScene extends Scene {
     }
 
     create() {
+        const {
+            reelCount,
+            rowsCount,
+
+            symbolHeight,
+            reelWidth,
+            spaceBetweenReels,
+
+            rotationsPerSpin,
+            spinSpeed,
+            delayBetweenRotations
+        } = config;
+
         this.camera = this.cameras.main;
         this.camera.setBackgroundColor(0x00daff);
 
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.85);
 
-        const dataService = new DataService(config.reelCount);
+        const dataService = new DataService(reelCount);
         dataService.generateSymbols();
 
         const viewModel = new ViewModel({
-            symbolHeight: config.symbolHeight,
-            reelWidth: config.symbolWidth,
-            spaceBetweenReels: config.spaceBetweenReels,
-            rowsCount: config.rowsCount,
+            symbolHeight,
+            reelWidth,
+            spaceBetweenReels,
+            rowsCount,
             screenCenter: this.cameras.main
         });
 
@@ -50,12 +63,13 @@ export class GameScene extends Scene {
             dataService.symbolGroups
         );
 
-        const engine = new Engine(
-            config.rotationsPerSpin,
-            config.spinSpeed,
-            config.symbolHeight,
-            viewData.reelCircumference
-        );
+        const engine = new Engine({
+            rotationsPerSpin,
+            spinSpeed,
+            delayBetweenRotations,
+            symbolHeight,
+            reelCircumference: viewData.reelCircumference
+        });
 
         const gameUI = new GameUI(this, viewData);
 
@@ -72,11 +86,7 @@ export class GameScene extends Scene {
                     viewData.reels
                 );
 
-                const durations = engine.calculateSpinDurations(
-                    distances,
-                    config.spinSpeed,
-                    config.delayBetweenRotations
-                );
+                const durations = engine.calculateSpinDurations(distances);
 
                 console.log(dataService.getSymbolCombinationLabels());
 
