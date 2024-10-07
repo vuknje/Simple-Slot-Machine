@@ -1,5 +1,5 @@
 import { ViewData } from './ViewModel';
-import { Engine } from './Engine';
+import Engine from './Engine';
 
 class GameUI extends Phaser.GameObjects.Container {
     vm: ViewData;
@@ -108,11 +108,10 @@ class GameUI extends Phaser.GameObjects.Container {
             this.scene.tweens.addCounter({
                 from: reelData.circumferencePosition,
                 to: reelData.circumferencePosition + distances[reelIndex],
-                duration: durations[reelIndex] + reelIndex * 250,
+                duration: durations[reelIndex],
                 ease: 'Cubic.Out',
                 onUpdate: (tween) => {
                     this.engine.updateReelPositions(reelData, tween.getValue());
-                    this.onSpinUpdate(tween.getValue());
 
                     instances[0].setY(reelData.instances[0].y);
                     instances[1].setY(reelData.instances[1].y);
@@ -130,16 +129,11 @@ class GameUI extends Phaser.GameObjects.Container {
         });
     }
 
-    onSpinUpdate(value: number) {
-        this.onSpinEndCb(value);
-    }
-
     onSpinEnd() {
         this.isSpinning = false;
         this.onSpinEndCb();
     }
 
-    onSpinUpdateCb(value: number) {}
     onSpinEndCb() {}
 
     // DEV_MODE

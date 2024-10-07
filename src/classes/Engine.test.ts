@@ -68,8 +68,6 @@ describe('Engine', () => {
                 reels
             );
 
-            console.log(distances);
-
             expect(distances).toEqual([3618, 5092, 3752]);
         });
     });
