@@ -3,11 +3,15 @@ class DataService {
     symbolGroups: number[][];
     symbolCombination: number[];
 
-    constructor(reelCount: number) {
+    labels = ['watermelon', 'pear', 'bannana', 'orange', 'lemon'];
+    showLogs = false;
+
+    constructor(reelCount: number, showLogs: boolean = false) {
         this.reelCount = reelCount;
+        this.showLogs = showLogs;
     }
 
-    generateSymbols(
+    generateSymbolGroups(
         shouldRandomize = true,
         uniqueSymbolsCount = 5,
         reelRepeatCount = 3
@@ -19,6 +23,17 @@ class DataService {
                 shouldRandomize
             );
         });
+
+        if (this.showLogs) {
+            console.log(
+                this.getGeneratedSymbolLabels()
+                    .map(
+                        (labels, reelIndex) =>
+                            `Reel ${reelIndex}: ${labels.join(', ')}`
+                    )
+                    .join('\n')
+            );
+        }
     }
 
     private randomizeSymbols(
@@ -48,14 +63,29 @@ class DataService {
         this.symbolCombination = Array.from({ length: this.reelCount }, () =>
             this.randomIntFromInterval(0, symbolGroups[0].length - 1)
         );
+
+        if (this.showLogs) {
+            console.log(
+                'Combination:',
+                this.getSymbolCombinationLabels().join(', ')
+            );
+        }
+    }
+
+    getGeneratedSymbolLabels() {
+        return this.symbolGroups.map((symbolIds) =>
+            symbolIds.map(this.getLabel, this)
+        );
     }
 
     getSymbolCombinationLabels() {
-        const labels = ['watermelon', 'pear', 'bannana', 'orange', 'lemon'];
-        return this.symbolCombination.map(
-            (symbolIndex, reelIndex) =>
-                labels[this.symbolGroups[reelIndex][symbolIndex]]
+        return this.symbolCombination.map((symbolIndex, reelIndex) =>
+            this.getLabel(this.symbolGroups[reelIndex][symbolIndex])
         );
+    }
+
+    getLabel(index: number) {
+        return this.labels[index];
     }
 
     shuffle(array: number[]) {

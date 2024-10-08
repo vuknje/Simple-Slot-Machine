@@ -2,12 +2,12 @@ import { describe, it, expect } from 'vitest';
 import DataService from './DataService';
 
 describe('DataService', () => {
-    describe('generateSymbols', () => {
+    describe('generateSymbolGroups', () => {
         it('returns an array of the length equal to the `reelCount`', () => {
             const reelCount = 3;
             const dataService = new DataService(reelCount);
 
-            dataService.generateSymbols();
+            dataService.generateSymbolGroups();
 
             expect(dataService.symbolGroups.length).toEqual(reelCount);
         });

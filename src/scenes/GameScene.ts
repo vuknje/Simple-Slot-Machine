@@ -47,8 +47,8 @@ export class GameScene extends Scene {
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.85);
 
-        const dataService = new DataService(reelCount);
-        dataService.generateSymbols();
+        const dataService = new DataService(reelCount, true);
+        dataService.generateSymbolGroups();
 
         const viewModel = new ViewModel({
             symbolHeight,
@@ -80,7 +80,6 @@ export class GameScene extends Scene {
             'SPIN!',
             () => {
                 dataService.generateSymbolCombination();
-                console.log(dataService.getSymbolCombinationLabels());
 
                 gameUI.spin(dataService.symbolCombination);
                 setTimeout(() => {
