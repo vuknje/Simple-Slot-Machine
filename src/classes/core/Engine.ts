@@ -1,4 +1,12 @@
-import { Reel } from './ViewModel';
+/*
+    The Engine is the 'brain' behind the spinning logic of the game.
+    It prepares data for the game UI (`calculateSpinDistances` and `calculateSpinDurations`).
+
+    It also updates the viewModel `Reel` based on the spin position and thus enables
+    the UI to be updated accordingly (`calculateSpinDurations`).
+*/
+
+import { Reel } from '../ViewModel';
 
 interface InitParams {
     rotationsPerSpin: number;
@@ -41,7 +49,10 @@ class Engine {
         });
     }
 
-    calculateSpinDistance(targetSymbolIndex: number, startingPoint = 0) {
+    calculateSpinDistance(
+        targetSymbolIndex: number,
+        startingPoint = 0
+    ): number {
         return (
             -startingPoint +
             this.rotationsPerSpin * this.reelCircumference +
@@ -57,7 +68,7 @@ class Engine {
         );
     }
 
-    updateReelPositions(reelData: Reel, value: number) {
+    updateReelPositions(reelData: Reel, value: number): void {
         const totalPosition = Math.round(value);
 
         reelData.circumferencePosition = totalPosition % this.reelCircumference;

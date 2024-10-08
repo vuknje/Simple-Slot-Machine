@@ -1,3 +1,19 @@
+/*
+    DataService is an abstraction over a server service that provides the data.
+    It prepares the core data - the reel symbols the game depends on.
+    `symbolGroups` as a simple 2-dimensional array of symbol IDs
+    that are used for generating the UI.
+
+    The method `generateSymbolCombination` returns a random combination - 
+    an array of the single symbol IDs from the previously generated `symbolGroups`.
+    The game engine then spins the reels so it shows the defined combination.
+
+    In practice 2 main methods (`generateSymbolGroups` and `generateSymbolCombination`)
+    would be async. For simplicity, here they are synchronous. 
+
+    `showLogs` enables logging the friendly output of the 2 methods in the console.  
+*/
+
 interface InitParams {
     reelCount: number;
     showLogs: boolean;
@@ -63,7 +79,7 @@ class DataService {
         return this.shuffle(arr);
     }
 
-    generateSymbolCombination(symbolGroups?: number[][]) {
+    generateSymbolCombination(symbolGroups?: number[][]): void {
         symbolGroups ||= this.symbolGroups;
         this.symbolCombination = Array.from({ length: this.reelCount }, () => {
             const min = Math.min(...symbolGroups[0]);
@@ -80,23 +96,23 @@ class DataService {
         }
     }
 
-    getGeneratedSymbolLabels() {
+    getGeneratedSymbolLabels(): string[][] {
         return this.symbolGroups.map((symbolIds) =>
             symbolIds.map(this.getLabel, this)
         );
     }
 
-    getSymbolCombinationLabels() {
+    getSymbolCombinationLabels(): string[] {
         return this.symbolCombination.map((symbolIndex, reelIndex) =>
             this.getLabel(this.symbolGroups[reelIndex][symbolIndex])
         );
     }
 
-    getLabel(index: number) {
+    getLabel(index: number): string {
         return this.labels[index];
     }
 
-    shuffle(array: number[]) {
+    shuffle(array: number[]): number[] {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
@@ -104,7 +120,7 @@ class DataService {
         return array;
     }
 
-    randomIntFromInterval(min: number, max: number) {
+    randomIntFromInterval(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 }

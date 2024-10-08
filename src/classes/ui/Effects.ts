@@ -1,3 +1,8 @@
+/*
+    The Effects class helps `GameUI` improve the UX by
+    animating and adding FX effects to the game objects.
+*/
+
 class Effects {
     scene: Phaser.Scene;
 
@@ -25,7 +30,10 @@ class Effects {
         });
     }
 
-    getWinningSymbols(reel: Phaser.GameObjects.Container, symbolIndex: number) {
+    getWinningSymbols(
+        reel: Phaser.GameObjects.Container,
+        symbolIndex: number
+    ): Phaser.GameObjects.GameObject[] {
         const symbols = reel.list.map((reelInstance) => {
             return (reelInstance as Phaser.GameObjects.Container).list[
                 symbolIndex
@@ -34,7 +42,10 @@ class Effects {
         return Array.from(symbols);
     }
 
-    addTempBlurEffect(symbols: Phaser.GameObjects.Image[], duration: number) {
+    addTempBlurEffect(
+        symbols: Phaser.GameObjects.Image[],
+        duration: number
+    ): void {
         setTimeout(() => {
             const effects = symbols.map((symbol) => {
                 return symbol.preFX!.addBlur(0, 0.5, 10, 2);

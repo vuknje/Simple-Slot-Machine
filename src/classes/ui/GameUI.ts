@@ -1,10 +1,31 @@
-import { ViewData, Reel } from './core/ViewModel';
-import Engine from './core/Engine';
-import Effects from './ui/Effects';
+/*
+    GameUI is the subclass of the Phaser Container class.
+
+    Its constructor gets the `viewData`, `engine`, and `effects` injected.
+
+    It builds the UI elements based on the `viewData` and
+    visual game constraints. 
+
+    In the `spin` method it uses the `engine` to calculate the 
+    distances and durations to start the spinning. Then it passes
+    the `reelData` to the engine to update the properties used
+    for updating the reel instances' position during the spin animation.
+
+    Finally, various game objects are passed to the `effects` methods
+    that add visual effects like motion blur and highlight the winning
+    symbol combination.
+
+    When `DEV_MODE` is enabled, it paints the reel instances in different colors
+    which helps understanding how the spinning algorithm works.
+*/
+
+import { ViewData, Reel } from '../core/ViewModel';
+import Engine from '../core/Engine';
+import Effects from './Effects';
 
 interface InitParams {
-    engine: Engine;
     viewData: ViewData;
+    engine: Engine;
     effects: Effects;
 }
 
@@ -17,7 +38,7 @@ class GameUI extends Phaser.GameObjects.Container {
     symbols: Phaser.GameObjects.Image[];
     isSpinning: boolean = false;
 
-    DEV_MODE: boolean = false;
+    private DEV_MODE: boolean;
 
     constructor(scene: Phaser.Scene, params: InitParams) {
         super(scene);
@@ -35,7 +56,7 @@ class GameUI extends Phaser.GameObjects.Container {
         );
     }
 
-    generateReels(viewData: ViewData) {
+    generateReels(viewData: ViewData): Phaser.GameObjects.Container[] {
         return viewData.reels.map((reelData, reelIndex) => {
             const reelInstances = reelData.instances.map(
                 (instanceData, instanceIndex) => {
@@ -89,7 +110,7 @@ class GameUI extends Phaser.GameObjects.Container {
         });
     }
 
-    addReelBg(reelData: Reel) {
+    addReelBg(reelData: Reel): Phaser.GameObjects.Rectangle {
         return this.scene.add
             .rectangle(
                 reelData.x,
@@ -103,7 +124,7 @@ class GameUI extends Phaser.GameObjects.Container {
             .setAlpha(0.85);
     }
 
-    addMask(reelData: Reel) {
+    addMask(reelData: Reel): Phaser.Display.Masks.GeometryMask {
         return this.scene.add
             .rectangle(
                 reelData.x,
@@ -117,7 +138,7 @@ class GameUI extends Phaser.GameObjects.Container {
             .createGeometryMask();
     }
 
-    spin(symbolCombination: number[]) {
+    spin(symbolCombination: number[]): void {
         if (this.isSpinning) return;
 
         this.isSpinning = true;

@@ -1,13 +1,13 @@
 import { Scene } from 'phaser';
 import { config } from '../config';
 
-import DataService from '../classes/DataService';
-import ViewModel from '../classes/ViewModel';
-import Engine from '../classes/Engine';
+import DataService from '../classes/core/DataService';
+import ViewModel from '../classes/core/ViewModel';
+import Engine from '../classes/core/Engine';
 
-import Button from '../classes/Button';
-import Effects from '../classes/Effects';
-import GameUI from '../classes/GameUI';
+import Button from '../classes/ui/Button';
+import Effects from '../classes/ui/Effects';
+import GameUI from '../classes/ui/GameUI';
 
 export class GameScene extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
