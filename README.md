@@ -1,6 +1,31 @@
 # Simple Slot Machine
 
-Based on [Phaser Vite TypeScript Template](https://github.com/phaserjs/template-vite-ts) with added [Vitest](https://vitest.dev/) for unit tests.
+A simple game made with the [Phaser](https://phaser.io/) framework.
+
+---
+
+The code is organized into 2 main parts: [core](src/classes/core) and [ui](src/classes/ui).
+
+### Core
+
+Framework-independent classes containing the game state and logic
+
+-   [DataService](src/classes/core/DataService.ts)
+-   [ViewModel](src/classes/core/ViewModel.ts)
+-   [Engine](src/classes/core/Engine.ts)
+
+### UI
+
+The implementation of the game in Phaser
+
+-   [GameScene](src/scenes/GameScene.ts)
+-   [GameUI](src/classes/ui/GameUI.ts)
+-   [Effects](src/classes/ui/Effects.ts)
+-   [Button](src/classes/ui/Button.ts)
+
+---
+
+Based on [Phaser Vite TypeScript Template](https://githubcom/phaserjs/template-vite-ts) with added [Vitest](https://vitest.dev/) for unit tests.
 
 ### Versions
 
