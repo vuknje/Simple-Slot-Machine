@@ -4,6 +4,7 @@ import { config } from '../config';
 import ViewModel from '../classes/ViewModel';
 import DataService from '../classes/DataService';
 import Engine from '../classes/Engine';
+import Effects from '../classes/Effects';
 import Button from '../classes/Button';
 import GameUI from '../classes/GameUI';
 
@@ -71,7 +72,7 @@ export class GameScene extends Scene {
             reelCircumference: viewData.reelCircumference
         });
 
-        const gameUI = new GameUI(this, engine, viewData);
+        const gameUI = new GameUI(this, engine, viewData, new Effects(this));
 
         const spinButton = new Button(
             this,

@@ -3,7 +3,7 @@ const config = {
     rowsCount: 3,
 
     symbolHeight: 134,
-    reelWidth: 134,
+    reelWidth: 180,
     spaceBetweenReels: 20,
 
     rotationsPerSpin: 6,
