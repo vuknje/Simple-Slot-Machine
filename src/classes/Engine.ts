@@ -31,7 +31,7 @@ class Engine {
 
     calculateSpinDistances(
         symbolCombination: number[],
-        reels: { circumferencePosition: number }[]
+        reels: Pick<Reel, 'circumferencePosition'>[]
     ): number[] {
         return reels.map((reel, reelIndex) => {
             return this.calculateSpinDistance(

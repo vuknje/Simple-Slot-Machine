@@ -60,9 +60,12 @@ class DataService {
 
     generateSymbolCombination(symbolGroups?: number[][]) {
         symbolGroups ||= this.symbolGroups;
-        this.symbolCombination = Array.from({ length: this.reelCount }, () =>
-            this.randomIntFromInterval(0, symbolGroups[0].length - 1)
-        );
+        this.symbolCombination = Array.from({ length: this.reelCount }, () => {
+            const min = Math.min(...symbolGroups[0]);
+            const max = Math.max(...symbolGroups[0]);
+
+            return this.randomIntFromInterval(min, max);
+        });
 
         if (this.showLogs) {
             console.log(

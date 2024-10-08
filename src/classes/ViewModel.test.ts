@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import ViewModel from './ViewModel';
 import { ViewData } from './ViewModel';
 
@@ -18,7 +18,7 @@ describe('ViewModel', () => {
     });
 
     describe('generateViewModelData', () => {
-        it('returns a proper view model data when passed 1 reel with 5 unique symbols each repeated twice', () => {
+        it('returns a valid view data when passed 1 reel with 5 unique symbols each repeated twice', () => {
             const input: number[][] = [[2, 4, 0, 1, 4, 3, 1, 2, 0, 3]];
             const output: ViewData = _viewModel.generateViewModelData(input);
 
@@ -50,7 +50,7 @@ describe('ViewModel', () => {
             });
         });
 
-        it('returns a proper view model data when passed 3 reels with 3 unique symbols each without repetition', () => {
+        it('returns a valid view data when passed 3 reels with 3 unique symbols each without repetition', () => {
             const input: number[][] = [
                 [0, 2, 1],
                 [1, 0, 2],

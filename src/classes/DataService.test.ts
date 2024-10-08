@@ -1,38 +1,41 @@
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import DataService from './DataService';
 
 describe('DataService', () => {
+    const reelCount = 3;
+    let _dataService: DataService;
+
+    beforeEach(() => {
+        _dataService = new DataService(reelCount);
+    });
+
     describe('generateSymbolGroups', () => {
-        it('returns an array of the length equal to the `reelCount`', () => {
-            const reelCount = 3;
-            const dataService = new DataService(reelCount);
+        it('returns an array of non-empty arrays, the length must be equal to the `reelCount`', () => {
+            _dataService.generateSymbolGroups();
 
-            dataService.generateSymbolGroups();
-
-            expect(dataService.symbolGroups.length).toEqual(reelCount);
+            expect(
+                _dataService.symbolGroups.some(
+                    (symbolGroup) => symbolGroup.length === 0
+                )
+            ).toBe(false);
+            expect(_dataService.symbolGroups.length).toEqual(reelCount);
         });
     });
 
     describe('randomizeSymbols', () => {
         it('returns an array with 3 unique symbols repeated 2 times (shuffle is OFF)', () => {
-            const dataService = new DataService(3);
-
-            const output = dataService['randomizeSymbols'](3, 2, false);
+            const output = _dataService['randomizeSymbols'](3, 2, false);
             expect(output).toEqual([0, 1, 2, 0, 1, 2]);
         });
 
         it('returns an array with `uniqueSymbolCount` unique symbols repeated `reelRepeatCount` times (shuffle is OFF)', () => {
-            const dataService = new DataService(3);
-
-            const output = dataService['randomizeSymbols'](5, 3, false);
+            const output = _dataService['randomizeSymbols'](5, 3, false);
             const arr = [0, 1, 2, 3, 4];
             expect(output).toEqual([...arr, ...arr, ...arr]);
         });
 
         it('returns a shuffled array with `uniqueSymbolCount` unique symbols repeated `reelRepeatCount` times (shuffle is ON)', () => {
-            const dataService = new DataService(3);
-
-            const output = dataService['randomizeSymbols'](5, 2, true);
+            const output = _dataService['randomizeSymbols'](5, 2, true);
             const sortedOutput = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];
             const sortNum = (a: number, b: number) => a - b;
 
@@ -43,22 +46,20 @@ describe('DataService', () => {
     });
 
     describe('generateSymbolCombination', () => {
-        it('returns an array of the length equal to the `reelCount`', () => {
-            const reelCount = 3;
-            const dataService = new DataService(reelCount);
-
+        it('returns an array of the length equal to the `reelCount` containing a provided symbolId', () => {
             const input = [
-                [1, 2, 0],
-                [0, 1, 2],
-                [1, 0, 2]
+                [1, 2, 3],
+                [3, 1, 2],
+                [1, 3, 2]
             ];
-            dataService.generateSymbolCombination(input);
 
-            expect(dataService.symbolCombination.length).toEqual(input.length);
+            _dataService.generateSymbolCombination(input);
+
+            expect(_dataService.symbolCombination.length).toEqual(input.length);
 
             for (let i = 0; i < input.length; i++) {
                 expect(
-                    input[i].includes(dataService.symbolCombination[i])
+                    input[i].includes(_dataService.symbolCombination[i])
                 ).toBe(true);
             }
         });

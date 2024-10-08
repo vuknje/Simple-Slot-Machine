@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import Engine from './Engine';
 import { Reel } from './ViewModel';
 
@@ -11,6 +11,7 @@ describe('Engine', () => {
         symbolHeight: 134,
         reelCircumference: 2010
     };
+
     let _engine: Engine;
 
     beforeEach(() => {
@@ -18,7 +19,7 @@ describe('Engine', () => {
     });
 
     describe('calculateSpinDistance', () => {
-        it('returns a proper distance when `startingPoint` is 0', () => {
+        it('returns a valid distance when `startingPoint` is 0', () => {
             const targetSymbolIndex = 7;
             const startingPoint = 0;
             const distance = _engine.calculateSpinDistance(
@@ -29,7 +30,7 @@ describe('Engine', () => {
             expect(distance).toBe(4824);
         });
 
-        it('returns a proper distance when `startingPoint` is greater than 0', () => {
+        it('returns a valid distance when `startingPoint` is greater than 0', () => {
             const targetSymbolIndex = 14;
             const startingPoint = 804;
             const distance = _engine.calculateSpinDistance(
@@ -42,7 +43,7 @@ describe('Engine', () => {
     });
 
     describe('calculateSpinDistances', () => {
-        it('returns a proper distances given `symbolCombination` and zero circumferencePositions', () => {
+        it('returns valid distances given `symbolCombination` and zero circumferencePositions', () => {
             const symbolCombination = [5, 1, 7];
             const reels = [
                 { circumferencePosition: 0 },
@@ -57,7 +58,7 @@ describe('Engine', () => {
             expect(distances).toEqual([4556, 4020, 4824]);
         });
 
-        it('returns a proper distances given `symbolCombination` and non-zero circumferencePositions', () => {
+        it('returns a valid distances given `symbolCombination` and non-zero circumferencePositions', () => {
             const symbolCombination = [2, 11, 0];
             const reels = [
                 { circumferencePosition: 536 },
