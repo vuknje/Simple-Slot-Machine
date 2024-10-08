@@ -1,14 +1,19 @@
+interface InitParams {
+    reelCount: number;
+    showLogs: boolean;
+}
+
 class DataService {
     reelCount: number;
+    showLogs = false;
+
+    labels = ['watermelon', 'pear', 'bannana', 'orange', 'lemon'];
+
     symbolGroups: number[][];
     symbolCombination: number[];
 
-    labels = ['watermelon', 'pear', 'bannana', 'orange', 'lemon'];
-    showLogs = false;
-
-    constructor(reelCount: number, showLogs: boolean = false) {
-        this.reelCount = reelCount;
-        this.showLogs = showLogs;
+    constructor(params: InitParams) {
+        Object.assign(this, params);
     }
 
     generateSymbolGroups(

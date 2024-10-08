@@ -1,11 +1,12 @@
 import { Scene } from 'phaser';
 import { config } from '../config';
 
-import ViewModel from '../classes/ViewModel';
 import DataService from '../classes/DataService';
+import ViewModel from '../classes/ViewModel';
 import Engine from '../classes/Engine';
-import Effects from '../classes/Effects';
+
 import Button from '../classes/Button';
+import Effects from '../classes/Effects';
 import GameUI from '../classes/GameUI';
 
 export class GameScene extends Scene {
@@ -48,7 +49,7 @@ export class GameScene extends Scene {
         this.background = this.add.image(512, 384, 'background');
         this.background.setAlpha(0.85);
 
-        const dataService = new DataService(reelCount, true);
+        const dataService = new DataService({ reelCount, showLogs: true });
         dataService.generateSymbolGroups();
 
         const viewModel = new ViewModel({

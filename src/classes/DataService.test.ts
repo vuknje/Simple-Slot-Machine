@@ -2,11 +2,11 @@ import { beforeEach, describe, it, expect } from 'vitest';
 import DataService from './DataService';
 
 describe('DataService', () => {
-    const reelCount = 3;
+    const params = { reelCount: 3, showLogs: false };
     let _dataService: DataService;
 
     beforeEach(() => {
-        _dataService = new DataService(reelCount);
+        _dataService = new DataService(params);
     });
 
     describe('generateSymbolGroups', () => {
@@ -18,7 +18,7 @@ describe('DataService', () => {
                     (symbolGroup) => symbolGroup.length === 0
                 )
             ).toBe(false);
-            expect(_dataService.symbolGroups.length).toEqual(reelCount);
+            expect(_dataService.symbolGroups.length).toEqual(3);
         });
     });
 
