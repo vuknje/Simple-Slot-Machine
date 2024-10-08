@@ -37,8 +37,8 @@ export class GameScene extends Scene {
             spaceBetweenReels,
 
             rotationsPerSpin,
-            spinSpeed,
-            delayBetweenRotations
+            minSpinDuration,
+            spinEndDelay
         } = config;
 
         this.camera = this.cameras.main;
@@ -64,8 +64,8 @@ export class GameScene extends Scene {
 
         const engine = new Engine({
             rotationsPerSpin,
-            spinSpeed,
-            delayBetweenRotations,
+            minSpinDuration,
+            spinEndDelay,
             symbolHeight,
             rowsCount,
             reelCircumference: viewData.reelCircumference

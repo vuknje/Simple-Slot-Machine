@@ -115,7 +115,7 @@ class GameUI extends Phaser.GameObjects.Container {
             this.vm.reels
         );
 
-        const durations = this.engine.calculateSpinDurations(distances);
+        const durations = this.engine.calculateSpinDurations(distances.length);
 
         this.vm.reels.forEach((reelData, reelIndex) => {
             const instances = [

@@ -2,8 +2,8 @@ import { Reel } from './ViewModel';
 
 interface InitParams {
     rotationsPerSpin: number;
-    spinSpeed: number;
-    delayBetweenRotations: number;
+    minSpinDuration: number;
+    spinEndDelay: number;
     symbolHeight: number;
     rowsCount: number;
     reelCircumference: number;
@@ -11,16 +11,16 @@ interface InitParams {
 
 class Engine {
     rotationsPerSpin: number;
-    spinSpeed: number;
-    delayBetweenRotations: number;
+    minSpinDuration: number;
+    spinEndDelay: number;
     symbolHeight: number;
     rowsCount: number;
     reelCircumference: number;
 
     constructor({
         rotationsPerSpin,
-        spinSpeed,
-        delayBetweenRotations,
+        minSpinDuration,
+        spinEndDelay,
         symbolHeight,
         rowsCount,
         reelCircumference
@@ -34,8 +34,8 @@ class Engine {
         }
 
         this.rotationsPerSpin = rotationsPerSpin;
-        this.spinSpeed = spinSpeed;
-        this.delayBetweenRotations = delayBetweenRotations;
+        this.minSpinDuration = minSpinDuration;
+        this.spinEndDelay = spinEndDelay;
         this.symbolHeight = symbolHeight;
         this.rowsCount = rowsCount;
         this.reelCircumference = reelCircumference;
@@ -62,15 +62,10 @@ class Engine {
         );
     }
 
-    calculateSpinDurations(distances: number[]): number[] {
-        return distances.map((distance, index) => {
-            return this.calculateDuration(distance, index);
-        });
-    }
-
-    calculateDuration(distance: number, index: number) {
-        return (
-            (distance * 1) / this.spinSpeed + this.delayBetweenRotations * index
+    calculateSpinDurations(reelCount: number): number[] {
+        return Array.from(
+            { length: reelCount },
+            (_, index) => this.minSpinDuration + this.spinEndDelay * index
         );
     }
 

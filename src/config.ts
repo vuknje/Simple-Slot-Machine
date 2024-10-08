@@ -7,8 +7,8 @@ const config = {
     spaceBetweenReels: 20,
 
     rotationsPerSpin: 6,
-    spinSpeed: 10,
-    delayBetweenRotations: 300
+    minSpinDuration: 2500,
+    spinEndDelay: 250
 };
 
 export { config };

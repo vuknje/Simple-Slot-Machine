@@ -5,9 +5,9 @@ import { Reel } from './ViewModel';
 describe('Engine', () => {
     const _params = {
         rotationsPerSpin: 2,
-        spinSpeed: 10,
+        minSpinDuration: 2500,
         rowsCount: 3,
-        delayBetweenRotations: 300,
+        spinEndDelay: 250,
         symbolHeight: 134,
         reelCircumference: 2010
     };
@@ -70,6 +70,15 @@ describe('Engine', () => {
             );
 
             expect(distances).toEqual([3618, 5092, 3752]);
+        });
+    });
+
+    describe('calculateSpinDurations', () => {
+        it('returns an array of reel spin durations given the number of reels', () => {
+            const reelCount = 3;
+            const durations = _engine.calculateSpinDurations(reelCount);
+
+            expect(durations).toEqual([2500, 2750, 3000]);
         });
     });
 
