@@ -72,7 +72,11 @@ export class GameScene extends Scene {
             reelCircumference: viewData.reelCircumference
         });
 
-        const gameUI = new GameUI(this, engine, viewData, new Effects(this));
+        const gameUI = new GameUI(this, {
+            engine,
+            viewData,
+            effects: new Effects(this)
+        });
 
         const spinButton = new Button(
             this,

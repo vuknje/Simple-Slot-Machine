@@ -10,35 +10,23 @@ interface InitParams {
 }
 
 class Engine {
-    rotationsPerSpin: number;
-    minSpinDuration: number;
-    spinEndDelay: number;
-    symbolHeight: number;
-    rowsCount: number;
-    reelCircumference: number;
+    private rotationsPerSpin: number;
+    private minSpinDuration: number;
+    private spinEndDelay: number;
+    private symbolHeight: number;
+    private rowsCount: number;
+    private reelCircumference: number;
 
-    constructor({
-        rotationsPerSpin,
-        minSpinDuration,
-        spinEndDelay,
-        symbolHeight,
-        rowsCount,
-        reelCircumference
-    }: InitParams) {
-        if (rowsCount % 2 === 0) {
+    constructor(params: InitParams) {
+        if (params.rowsCount % 2 === 0) {
             throw new Error('rowsCount must be an odd number');
         }
 
-        if (rotationsPerSpin < 1) {
+        if (params.rotationsPerSpin < 1) {
             throw new Error('rotationsPerSpin must be at least 1');
         }
 
-        this.rotationsPerSpin = rotationsPerSpin;
-        this.minSpinDuration = minSpinDuration;
-        this.spinEndDelay = spinEndDelay;
-        this.symbolHeight = symbolHeight;
-        this.rowsCount = rowsCount;
-        this.reelCircumference = reelCircumference;
+        Object.assign(this, params);
     }
 
     calculateSpinDistances(

@@ -43,19 +43,8 @@ class ViewModel {
 
     data: ViewData;
 
-    constructor({
-        symbolHeight,
-        reelWidth,
-        spaceBetweenReels,
-        rowsCount,
-        screenCenter
-    }: InitParams) {
-        this.symbolHeight = symbolHeight;
-        this.reelWidth = reelWidth;
-        this.spaceBetweenReels = spaceBetweenReels;
-        this.rowsCount = rowsCount;
-
-        this.screenCenter = screenCenter;
+    constructor(params: InitParams) {
+        Object.assign(this, params);
     }
 
     generateViewModelData(symbolGroups: number[][]): ViewData {

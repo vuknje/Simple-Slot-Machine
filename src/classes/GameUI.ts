@@ -2,8 +2,14 @@ import { ViewData, Reel } from './ViewModel';
 import Engine from './Engine';
 import Effects from './Effects';
 
+interface InitParams {
+    engine: Engine;
+    viewData: ViewData;
+    effects: Effects;
+}
+
 class GameUI extends Phaser.GameObjects.Container {
-    vm: ViewData;
+    viewData: ViewData;
     engine: Engine;
     effects: Effects;
 
@@ -13,26 +19,18 @@ class GameUI extends Phaser.GameObjects.Container {
 
     DEV_MODE: boolean = false;
 
-    constructor(
-        scene: Phaser.Scene,
-        engine: Engine,
-        viewData: ViewData,
-        effects: Effects
-    ) {
+    constructor(scene: Phaser.Scene, params: InitParams) {
         super(scene);
 
+        Object.assign(this, params);
+
         this.DEV_MODE = false;
-
-        this.vm = viewData;
-        this.engine = engine;
-        this.effects = effects;
-
         this.symbols = [];
-        this.reels = this.generateReels(viewData);
+        this.reels = this.generateReels(this.viewData);
 
         this.scene.add.container(
-            this.vm.machineX,
-            this.vm.machineY,
+            this.viewData.machineX,
+            this.viewData.machineY,
             this.reels
         );
     }
@@ -96,8 +94,8 @@ class GameUI extends Phaser.GameObjects.Container {
             .rectangle(
                 reelData.x,
                 reelData.y,
-                this.vm.reelWidth,
-                this.vm.reelHeight,
+                this.viewData.reelWidth,
+                this.viewData.reelHeight,
                 0xffffff
             )
             .setOrigin(0, 0)
@@ -110,8 +108,8 @@ class GameUI extends Phaser.GameObjects.Container {
             .rectangle(
                 reelData.x,
                 reelData.y,
-                this.vm.reelWidth,
-                this.vm.reelHeight,
+                this.viewData.reelWidth,
+                this.viewData.reelHeight,
                 0xff0000
             )
             .setOrigin(0, 0)
@@ -126,7 +124,7 @@ class GameUI extends Phaser.GameObjects.Container {
 
         const distances = this.engine.calculateSpinDistances(
             symbolCombination,
-            this.vm.reels
+            this.viewData.reels
         );
 
         const durations = this.engine.calculateSpinDurations(
@@ -135,7 +133,7 @@ class GameUI extends Phaser.GameObjects.Container {
 
         this.effects.addTempBlurEffect(this.symbols, durations[0]);
 
-        this.vm.reels.forEach((reelData, reelIndex) => {
+        this.viewData.reels.forEach((reelData, reelIndex) => {
             const instances = [
                 this.reels[reelIndex].list[0] as Phaser.GameObjects.Container,
                 this.reels[reelIndex].list[1] as Phaser.GameObjects.Container
@@ -162,7 +160,7 @@ class GameUI extends Phaser.GameObjects.Container {
                         this.onSpinEnd();
 
                         if (this.DEV_MODE) {
-                            console.log(JSON.stringify(this.vm, null, 2));
+                            console.log(JSON.stringify(this.viewData, null, 2));
                         }
                     }
                 }
