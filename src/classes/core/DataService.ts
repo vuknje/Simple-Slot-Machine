@@ -1,24 +1,23 @@
-/*
-    DataService is an abstraction over a server service that provides the data.
-    It prepares the core data - the reel symbols the game depends on.
-    `symbolGroups` as a simple 2-dimensional array of symbol IDs
-    that are used for generating the UI.
-
-    The method `generateSymbolCombination` returns a random combination - 
-    an array of the single symbol IDs from the previously generated `symbolGroups`.
-    The game engine then spins the reels so it shows the defined combination.
-
-    In practice 2 main methods (`generateSymbolGroups` and `generateSymbolCombination`)
-    would be async. For simplicity, here they are synchronous. 
-
-    `showLogs` enables logging the friendly output of the 2 methods in the console.  
-*/
-
 interface InitParams {
     reelCount: number;
     showLogs: boolean;
 }
 
+/**
+ * DataService is an abstraction over a server service that provides the data.
+ * It prepares the core data - the reel symbols the game depends on.
+ * `symbolGroups` as a simple 2-dimensional array of symbol IDs
+ * that are used for generating the UI.
+ *
+ * The method `generateSymbolCombination` returns a random combination -
+ * an array of the single symbol IDs from the previously generated `symbolGroups`.
+ * The game engine then spins the reels so it shows the defined combination.
+ *
+ * In practice 2 main methods (`generateSymbolGroups` and `generateSymbolCombination`)
+ * would be async. For simplicity, here they are synchronous.
+ *
+ * `showLogs` enables logging the friendly output of the 2 methods in the console.
+ */
 class DataService {
     reelCount: number;
     showLogs = false;

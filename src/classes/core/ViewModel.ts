@@ -1,16 +1,3 @@
-/*
-    ViewModel is responsible for generating viewData (`generateViewModelData`)
-    upon which the UI is being built. It takes care about the dimensions and positions
-    of various elements, especially the representation of the reel and
-    its two so-called 'instances' that are used in animation for creating
-    the illusion of an infinite (circular) motion.
-
-    viewData state is consumed by the game UI, but updated only by the `Engine` class.
-
-    Having the viewModel (e.g. a UI state) represented in a data structure helps with
-    decoupling the game UI from the business logic and facilitates the development and testing.
-*/
-
 interface InitParams {
     symbolHeight: number;
     reelWidth: number;
@@ -47,6 +34,18 @@ interface ReelInstance {
     symbolIds: number[];
 }
 
+/**
+ * ViewModel is responsible for generating viewData (`generateViewModelData`)
+ * upon which the UI is being built. It takes care about the dimensions and positions
+ * of various elements, especially the representation of the reel and
+ * its two so-called 'instances' that are used in animation for creating
+ * the illusion of an infinite (circular) motion.
+ *
+ * viewData state is consumed by the game UI, but updated only by the `Engine` class.
+ *
+ * Having the viewModel (e.g. a UI state) represented in a data structure helps with
+ * decoupling the game UI from the business logic and facilitates the development and testing.
+ */
 class ViewModel {
     private symbolHeight: number;
     private reelWidth: number;

@@ -1,11 +1,3 @@
-/*
-    The Engine is the 'brain' behind the spinning logic of the game.
-    It prepares data for the game UI (`calculateSpinDistances` and `calculateSpinDurations`).
-
-    It also updates the viewModel `Reel` based on the spin position and thus enables
-    the UI to be updated accordingly (`calculateSpinDurations`).
-*/
-
 import { Reel } from '../ViewModel';
 
 interface InitParams {
@@ -17,6 +9,13 @@ interface InitParams {
     reelCircumference: number;
 }
 
+/**
+ * The Engine is the 'brain' behind the spinning logic of the game.
+ * It prepares data for the game UI (`calculateSpinDistances` and `calculateSpinDurations`).
+ *
+ * It also updates the viewModel `Reel` based on the spin position and thus enables
+ * the UI to be updated accordingly (`calculateSpinDurations`).
+ */
 class Engine {
     private rotationsPerSpin: number;
     private minSpinDuration: number;

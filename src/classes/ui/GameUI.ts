@@ -1,24 +1,3 @@
-/*
-    GameUI is the subclass of the Phaser Container class.
-
-    Its constructor gets the `viewData`, `engine`, and `effects` injected.
-
-    It builds the UI elements based on the `viewData` and
-    visual game constraints. 
-
-    In the `spin` method it uses the `engine` to calculate the 
-    distances and durations to start the spinning. Then it passes
-    the `reelData` to the engine to update the properties used
-    for updating the reel instances' position during the spin animation.
-
-    Finally, various game objects are passed to the `effects` methods
-    that add visual effects like motion blur and highlight the winning
-    symbol combination.
-
-    When `DEV_MODE` is enabled, it paints the reel instances in different colors
-    which helps understanding how the spinning algorithm works.
-*/
-
 import { ViewData, Reel } from '../core/ViewModel';
 import Engine from '../core/Engine';
 import Effects from './Effects';
@@ -29,6 +8,26 @@ interface InitParams {
     effects: Effects;
 }
 
+/**
+ * GameUI is the subclass of the Phaser Container class.
+ *
+ * Its constructor gets the `viewData`, `engine`, and `effects` injected.
+ *
+ * It builds the UI elements based on the `viewData` and
+ * visual game constraints.
+ *
+ * In the `spin` method it uses the `engine` to calculate the
+ * distances and durations to start the spinning. Then it passes
+ * the `reelData` to the engine to update the properties used
+ * for updating the reel instances' position during the spin animation.
+ *
+ * Finally, various game objects are passed to the `effects` methods
+ * that add visual effects like motion blur and highlight the winning
+ * symbol combination.
+ *
+ * When `DEV_MODE` is enabled, it paints the reel instances in different colors
+ * which helps understanding how the spinning algorithm works.
+ */
 class GameUI extends Phaser.GameObjects.Container {
     viewData: ViewData;
     engine: Engine;

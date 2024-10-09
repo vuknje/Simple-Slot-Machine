@@ -1,8 +1,7 @@
-/*
-    The Effects class helps `GameUI` improve the UX by
-    animating and adding FX effects to the game objects.
-*/
-
+/**
+ * The Effects class helps `GameUI` improve the UX by
+ * animating and adding FX effects to the game objects.
+ */
 class Effects {
     scene: Phaser.Scene;
 

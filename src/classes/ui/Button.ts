@@ -1,8 +1,7 @@
-/*
-    The Button class is a simple subclass of a phaser Text
-    that takes a click callback and defines different interaction states.
-*/
-
+/**
+ * The Button class is a simple subclass of a phaser Text
+ * that takes a click callback and defines different interaction states.
+ */
 class Button extends Phaser.GameObjects.Text {
     constructor(
         scene: Phaser.Scene,
